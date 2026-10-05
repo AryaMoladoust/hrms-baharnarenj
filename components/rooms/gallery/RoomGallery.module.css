@@ -1,0 +1,73 @@
+.gallery {
+  --tone: var(--tone-suite);
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 28px 28px;
+  background: var(--tone);
+}
+.gallery[data-room='bahar'] { --tone: var(--tone-bahar); }
+.gallery[data-room='tabestan'] { --tone: var(--tone-tabestan); }
+.gallery[data-room='paeez'] { --tone: var(--tone-paeez); }
+.gallery[data-room='zemestan'] { --tone: var(--tone-zemestan); }
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.track::-webkit-scrollbar { display: none; }
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 3;
+  scroll-snap-align: center;
+  color: rgba(27, 31, 23, .35);
+  display: grid;
+  place-items: center;
+}
+.slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.placeholder { width: 64px; height: 84px; }
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(15, 30, 25, .62);
+  color: #f7f1dc;
+}
+.arrow:disabled { opacity: .3; cursor: default; }
+.prev { inset-inline-start: 10px; }
+.next { inset-inline-end: 10px; }
+/* Chevron paths point left/right; in RTL the logical "previous" is on the right, so mirror the icons. */
+:global([dir='rtl']) .arrow svg { transform: scaleX(-1); }
+
+.dots { position: absolute; inset-inline: 0; bottom: 12px; display: flex; justify-content: center; gap: 4px; }
+.dot, .dotActive {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  position: relative;
+}
+.dot::after, .dotActive::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: rgba(247, 241, 220, .6);
+}
+.dotActive::after { inset: 7px; background: var(--amber); box-shadow: 0 0 0 2px rgba(15, 30, 25, .5); }
+
+@media (min-width: 900px) {
+  .gallery { border-radius: 28px; }
+  .slide { aspect-ratio: 3 / 2; }
+}
