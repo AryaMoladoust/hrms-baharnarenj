@@ -7,7 +7,7 @@ import RoomTile from '@/components/user/room-card/RoomTile';
 import { usePreferences } from '@/components/providers/Preferences';
 import { rooms } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
-import DateField from '@/components/user/booking/DateField';
+import DateRangeFields from '@/components/user/booking/DateRangeFields';
 import { useDateRange } from '@/components/user/booking/useDateRange';
 import { formatDay } from '@/lib/dates';
 import styles from './HomePage.module.css';
@@ -52,8 +52,7 @@ export default function HomePage() {
       </section>
 
       <section className={styles.search} aria-label={t('search')}>
-        <DateField id="check-in" label={t('checkIn')} hint={t('today')} value={checkIn} min={range.minCheckIn} onChange={range.changeCheckIn} lang={lang} />
-        <DateField id="check-out" label={t('checkOut')} hint={t('nights', { n: range.nights })} value={checkOut} min={range.minCheckOut} onChange={range.changeCheckOut} lang={lang} />
+        <DateRangeFields range={range} />
         <button type="button" className={styles.searchButton} disabled={!ready || loading} onClick={() => search(checkIn, checkOut)}>
           {loading ? t('searching') : t('search')}
         </button>

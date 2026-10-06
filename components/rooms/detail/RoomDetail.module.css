@@ -29,6 +29,12 @@
 .planPrice s { display: block; font-size: 12px; opacity: .55; }
 .planPrice b { font-size: 17px; }
 
+.nightPrice { margin: 0; display: flex; align-items: baseline; gap: 8px; }
+.nightPrice s { opacity: .55; font-size: 14px; }
+.nightPrice strong { font-size: 26px; }
+.nightPrice span { color: var(--muted); font-size: 13px; }
+.info h2 small { font-weight: 400; color: var(--muted); font-size: 12px; }
+
 .rule { margin: 12px 0 0; font-size: 13px; color: var(--muted); line-height: 1.9; }
 
 .bar {

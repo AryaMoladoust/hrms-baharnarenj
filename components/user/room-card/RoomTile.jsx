@@ -9,7 +9,7 @@ export default function RoomTile({ room, info, checkIn, checkOut }) {
   const { t, lang } = usePreferences();
   const booked = info?.status === 'booked';
   const discount = !booked && info?.discountPercent > 0 ? info.discountPercent : 0;
-  const basePrice = info?.prices?.standard;
+  const basePrice = info?.price;
   const finalPrice = basePrice ? Math.round(basePrice * (1 - discount / 100)) : null;
   const name = lang === 'fa' ? room.name : room.nameEn;
 

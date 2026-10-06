@@ -44,37 +44,100 @@
 .menuIcon i { display: block; height: 2px; border-radius: 999px; background: currentColor; }
 .menuIcon i:nth-child(2) { width: 14px; }
 
-.overlay { position: fixed; inset: 0; z-index: 20; background: rgba(5, 14, 11, .6); }
+.overlay { position: fixed; inset: 0; z-index: 40; background: rgba(5, 14, 11, .6); backdrop-filter: blur(3px); animation: fade .2s ease-out; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
+/* The menu is always "night": deep green, lantern amber, roof-tile edge. */
 .drawer {
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44' fill='none' stroke='%23f7f1dc' stroke-opacity='.06'%3E%3Crect x='10' y='10' width='24' height='24'/%3E%3Crect x='10' y='10' width='24' height='24' transform='rotate(45 22 22)'/%3E%3C/svg%3E");
   position: absolute;
   inset-block: 0;
   inset-inline-start: 0;
-  width: min(300px, 82vw);
-  padding: 20px;
+  width: min(320px, 86vw);
+  padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  background: var(--surface);
-  color: var(--ink);
+  gap: 18px;
+  overflow-y: auto;
+  background-color: var(--night);
+  background-image: radial-gradient(ellipse 120% 40% at 50% 0, rgba(240, 166, 58, .2), transparent 70%), var(--pattern);
+  color: #f7f1dc;
+  animation: slide .28s ease-out;
 }
+@keyframes slide { from { transform: translateX(-24px); opacity: 0; } to { transform: none; opacity: 1; } }
+:global([dir='rtl']) .drawer { animation-name: slideRtl; }
+@keyframes slideRtl { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 
-.drawer a {
-  padding: 14px 8px;
-  border-bottom: 1px solid var(--line);
-  font-size: 17px;
-  font-weight: 600;
-}
+.drawerTop { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.drawerBrand { display: flex; align-items: center; gap: 12px; color: var(--amber); }
+.drawerBrand div { display: grid; }
+.drawerBrand strong { font-family: var(--font-display); font-size: 30px; line-height: 1.2; }
+.drawerBrand span { color: #cfc9b3; font-size: 13px; }
 
 .close {
-  align-self: flex-start;
-  margin-bottom: 12px;
-  min-height: 44px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--muted);
+  width: 44px; height: 44px; flex: none; display: grid; place-items: center;
+  border: 1px solid rgba(247, 241, 220, .3); border-radius: 14px; background: transparent; color: #f7f1dc;
+}
+
+.links { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.link, .linkActive {
+  position: relative;
+  min-height: 60px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 18px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #f7f1dc;
+}
+.link:hover { background: rgba(247, 241, 220, .07); }
+.linkActive { background: rgba(240, 166, 58, .16); color: var(--amber); }
+.linkActive::before { content: ''; position: absolute; inset-block: 14px; inset-inline-start: 0; width: 4px; border-radius: 999px; background: var(--amber); }
+
+.linkIcon {
+  width: 44px; height: 44px; flex: none; display: grid; place-items: center;
+  border-radius: 14px; background: rgba(247, 241, 220, .08); color: var(--amber);
+}
+.linkActive .linkIcon { background: var(--amber); color: var(--night); }
+
+.drawerBottom { margin-top: auto; display: grid; gap: 12px; }
+.owner {
+  min-height: 68px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px dashed rgba(240, 166, 58, .6);
+  border-radius: 18px;
+  color: #f7f1dc;
+}
+.owner span:last-child { display: grid; }
+.owner strong { font-size: 16px; }
+.owner small { color: #cfc9b3; font-size: 12px; }
+
+.drawerTools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.drawerTools button {
+  min-height: 44px; border: 1px solid rgba(247, 241, 220, .25); border-radius: 12px;
+  background: transparent; color: #f7f1dc; font-size: 14px; font-weight: 600;
+}
+
+/* Roof tiles along the menu's inner edge. */
+.edge {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 12px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--roof), var(--roof)) 100% 0 / 3px 100% no-repeat,
+    radial-gradient(circle at 100% 11px, var(--roof) 0 9px, transparent 10px) 0 0 / 12px 22px repeat-y;
+}
+:global([dir='rtl']) .edge {
+  background:
+    linear-gradient(var(--roof), var(--roof)) 0 0 / 3px 100% no-repeat,
+    radial-gradient(circle at 0 11px, var(--roof) 0 9px, transparent 10px) 0 0 / 12px 22px repeat-y;
 }
 
 /* Inner pages: a plain bar instead of floating over the hero. */

@@ -8,13 +8,15 @@ import { useDateRange } from '@/components/user/booking/useDateRange';
 import { usePreferences } from '@/components/providers/Preferences';
 import { getRoomBySlug } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
-import { calculateQuote, PLANS } from '@/lib/pricing';
+import { addonQuantity, ADDONS, calculateQuote } from '@/lib/pricing';
 import { isValidMobile, isValidNationalId, normalizeDigits } from '@/lib/booking/validation';
 import { submitReservation } from '@/lib/booking/submit';
 import { formatDay, formatNumber } from '@/lib/dates';
 import styles from './BookingForm.module.css';
 
-const PLAN_KEYS = { standard: ['planStandard', 'planStandardNote'], breakfast: ['planBreakfast', 'planBreakfastNote'], full: ['planFull', 'planFullNote'] };
+const ADDON_KEYS = { breakfast: 'addonBreakfast', hygiene: 'addonHygiene' };
+const UNIT_KEYS = { perPersonPerNight: 'unitPerPersonPerNight', perPerson: 'unitPerPerson', perNight: 'unitPerNight', flat: 'unitFlat' };
+const QTY_KEYS = { perPersonPerNight: 'qtyPerPersonPerNight', perPerson: 'qtyPerPerson', perNight: 'qtyPerNight', flat: 'qtyFlat' };
 
 export default function BookingForm({ slug }) {
   const { t, lang } = usePreferences();
@@ -24,7 +26,7 @@ export default function BookingForm({ slug }) {
   const range = useDateRange(initial);
   const [info, setInfo] = useState(null);
 
-  const [plan, setPlan] = useState(PLANS.includes(params.get('plan')) ? params.get('plan') : 'standard');
+  const [selected, setSelected] = useState({ breakfast: false, hygiene: false });
   const [guests, setGuests] = useState(2);
   const [form, setForm] = useState({ fullName: '', mobile: '', nationalId: '' });
   const [errors, setErrors] = useState({});
@@ -35,7 +37,7 @@ export default function BookingForm({ slug }) {
     getAvailability({ checkIn: range.checkIn, checkOut: range.checkOut }).then((list) => setInfo(list.find((item) => item.slug === slug) || null));
   }, [range.ready, range.checkIn, range.checkOut, slug]);
 
-  const quote = useMemo(() => (info ? calculateQuote({ info, plan, nights: range.nights, guests }) : null), [info, plan, range.nights, guests]);
+  const quote = useMemo(() => (info ? calculateQuote({ info, selected, nights: range.nights, guests }) : null), [info, selected, range.nights, guests]);
   const num = (value) => formatNumber(value, lang);
   const setField = (name) => (event) => setForm((prev) => ({ ...prev, [name]: event.target.value }));
 
@@ -50,7 +52,7 @@ export default function BookingForm({ slug }) {
 
     setStatus('sending');
     const result = await submitReservation({
-      slug, plan, guests,
+      slug, guests, addons: selected,
       checkIn: range.checkIn, checkOut: range.checkOut,
       fullName: form.fullName.trim(),
       mobile: normalizeDigits(form.mobile),
@@ -60,6 +62,13 @@ export default function BookingForm({ slug }) {
   };
 
   const booked = info?.status === 'booked';
+
+  const lineLabel = (line) => {
+    if (line.type === 'room') return t('roomLine', { n: num(line.nights) });
+    if (line.type === 'extraGuests') return t('extraGuestsLine', { n: num(line.extraGuests), nights: num(line.nights) });
+    const qty = t(QTY_KEYS[line.unit], { guests: num(line.guests), nights: num(line.nights) });
+    return `${t(ADDON_KEYS[line.type])}${qty ? `: ${qty}` : ''}`;
+  };
 
   return (
     <main className={styles.page}>
@@ -78,15 +87,29 @@ export default function BookingForm({ slug }) {
 
           {booked && <p className={styles.alert} role="alert">{t('roomBooked')}. {t('roomBookedHint')}</p>}
 
-          <h2>{t('plansTitle')}</h2>
-          <div className={styles.plans} role="radiogroup" aria-label={t('plansTitle')}>
-            {PLANS.map((id) => (
-              <label key={id} className={plan === id ? styles.planOn : styles.plan}>
-                <input type="radio" name="plan" value={id} checked={plan === id} onChange={() => setPlan(id)} />
-                <span><strong>{t(PLAN_KEYS[id][0])}</strong><small>{t(PLAN_KEYS[id][1])}</small></span>
-                {info && <b>{num(calculateQuote({ info, plan: id, nights: 1, guests: 1 }).perNight)}</b>}
-              </label>
-            ))}
+          <h2>{t('addonsTitle')} <small>{t('optional')}</small></h2>
+          <div className={styles.addons}>
+            {info && ADDONS.map((key) => {
+              const addon = info.addons[key];
+              const on = selected[key];
+              const qty = addonQuantity(addon.unit, guests, range.nights);
+              return (
+                <label key={key} className={on ? styles.addonOn : styles.addon}>
+                  <input type="checkbox" checked={on} onChange={(event) => setSelected((prev) => ({ ...prev, [key]: event.target.checked }))} />
+                  <span>
+                    <strong>{t(ADDON_KEYS[key])}</strong>
+                    <small>{t(UNIT_KEYS[addon.unit])}</small>
+                    {on && (
+                      <em>
+                        {t(QTY_KEYS[addon.unit], { guests: num(guests), nights: num(range.nights) })}
+                        {addon.unit !== 'flat' && ` = ${num(addon.price * qty)}`}
+                      </em>
+                    )}
+                  </span>
+                  <b dir="ltr">+{num(addon.price)}</b>
+                </label>
+              );
+            })}
           </div>
 
           <h2>{t('yourDetails')}</h2>
@@ -111,7 +134,7 @@ export default function BookingForm({ slug }) {
               <span>{t('guestsCount')}</span>
               <div className={styles.stepper}>
                 <button type="button" aria-label={t('guestsMinus')} disabled={guests <= 1} onClick={() => setGuests(guests - 1)}>−</button>
-                <output>{t('guestsUnit', { n: num(guests) })}</output>
+                <output aria-live="polite"><b>{num(guests)}</b> <span>{t('guestsUnit', { n: '' }).trim()}</span></output>
                 <button type="button" aria-label={t('guestsPlus')} disabled={info ? guests >= info.guests.max : false} onClick={() => setGuests(guests + 1)}>+</button>
               </div>
               {info && <small>{t('guestsMax', { n: num(info.guests.max) })}. {t('guestRule', { n: num(info.guests.included), price: num(info.guests.extraPrice) })}</small>}
@@ -123,10 +146,12 @@ export default function BookingForm({ slug }) {
           <h2>{t('summary')}</h2>
           {quote && (
             <dl>
-              <div><dt>{t('stayLine', { plan: t(PLAN_KEYS[plan][0]), n: num(range.nights) })}</dt><dd>{num(quote.roomTotal)}</dd></div>
-              {quote.extraGuests > 0 && (
-                <div><dt>{t('extraLine', { n: num(quote.extraGuests), nights: num(range.nights) })}</dt><dd>{num(quote.extraTotal)}</dd></div>
-              )}
+              {quote.lines.map((line) => (
+                <div key={line.type}>
+                  <dt>{lineLabel(line)}</dt>
+                  <dd>{num(line.amount)}</dd>
+                </div>
+              ))}
               {quote.discountPercent > 0 && <p className={styles.discount}>{t('discountApplied', { n: num(quote.discountPercent) })}</p>}
               <div className={styles.total}><dt>{t('total')}</dt><dd>{num(quote.total)} <small>{t('currency')}</small></dd></div>
             </dl>

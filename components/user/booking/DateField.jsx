@@ -3,14 +3,13 @@
 import { formatDay } from '@/lib/dates';
 import styles from './DateField.module.css';
 
-export default function DateField({ id, label, hint, value, min, onChange, lang }) {
+// A tappable card showing one date. Opens the shared calendar sheet.
+export default function DateField({ label, hint, value, onOpen, lang }) {
   return (
-    <div className={styles.field}>
-      <label htmlFor={id}>{label}</label>
+    <button type="button" className={styles.field} onClick={onOpen} aria-haspopup="dialog">
+      <span className={styles.label}>{label}</span>
       <strong>{value ? formatDay(value, lang, true) : '…'}</strong>
-      <span>{hint}</span>
-      {/* Native picker sits invisibly on top: one tap opens the phone's date sheet. */}
-      <input id={id} type="date" value={value} min={min} onChange={(event) => onChange(event.target.value)} />
-    </div>
+      <span className={styles.hint}>{hint}</span>
+    </button>
   );
 }
