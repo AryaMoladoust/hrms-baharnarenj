@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { usePreferences } from '@/components/providers/Preferences';
+import SupportCard from '@/components/user/support/SupportCard';
 import styles from './Header.module.css';
 
 const icon = (paths) => (
@@ -18,7 +19,7 @@ const ICONS = {
 };
 
 export default function Header({ solid = false }) {
-  const { t, toggleTheme, toggleLang } = usePreferences();
+  const { t, toggleLang } = usePreferences();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -48,11 +49,6 @@ export default function Header({ solid = false }) {
 
       <div className={styles.actions}>
         <button className={styles.textButton} type="button" onClick={toggleLang}>{t('langShort')}</button>
-        <button className={`${styles.iconButton} ${styles.lantern}`} type="button" aria-label={t('toggleTheme')} onClick={toggleTheme}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 2v3M9 5h6M8 8h8l1.5 9h-11zM7 17h10M12 17v3M10 20h4" />
-          </svg>
-        </button>
       </div>
 
       {open && (
@@ -79,15 +75,14 @@ export default function Header({ solid = false }) {
               ))}
             </ul>
 
+            <SupportCard variant="night" />
+
             <div className={styles.drawerBottom}>
               <Link href="/owner/login" className={styles.owner} onClick={() => setOpen(false)}>
                 <span className={styles.linkIcon}>{ICONS.owner}</span>
                 <span><strong>{t('navOwner')}</strong><small>{t('menuOwnerHint')}</small></span>
               </Link>
-              <div className={styles.drawerTools}>
-                <button type="button" onClick={toggleLang}>{t('switchLang')}</button>
-                <button type="button" onClick={toggleTheme}>{t('toggleTheme')}</button>
-              </div>
+              <button type="button" className={styles.langButton} onClick={toggleLang}>{t('switchLang')}</button>
             </div>
             <span className={styles.edge} aria-hidden="true" />
           </nav>

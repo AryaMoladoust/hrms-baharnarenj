@@ -21,7 +21,8 @@
 .slide {
   position: relative;
   flex: 0 0 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 5; /* room photos are portrait; 4:5 keeps almost all of each photo */
+  max-height: min(82vh, 780px);
   scroll-snap-align: center;
   color: rgba(27, 31, 23, .35);
   display: grid;
@@ -69,5 +70,4 @@
 
 @media (min-width: 900px) {
   .gallery { border-radius: 28px; }
-  .slide { aspect-ratio: 3 / 2; }
 }

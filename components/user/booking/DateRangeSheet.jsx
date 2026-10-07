@@ -12,22 +12,28 @@ const Chevron = ({ flip }) => (
   </svg>
 );
 
-// Month calendar in a bottom sheet (phones) or centered dialog (desktop). Jalali for Persian, Gregorian for English.
-export default function DateRangeSheet({ open, picking, onPicking, range, onClose }) {
+/**
+ * One calendar, one date. mode 'in' picks the check-in day (today is selected by default);
+ * mode 'out' picks the check-out day and depends on check-in: earlier days and the check-in day itself are disabled.
+ * Picking a day closes the sheet. The calendar is Jalali in both languages.
+ */
+export default function DateRangeSheet({ open, mode, range, onClose }) {
   const { t, lang } = usePreferences();
   const system = systemFor(lang);
   const today = toInputDate(new Date());
   const todayParts = partsOf(today, system);
   const [view, setView] = useState(null);
 
-  // Jump to the month being edited each time the sheet opens.
+  const firstAllowed = mode === 'out' ? addDays(range.checkIn || today, 1) : today;
+
+  // Jump to the month of the date being edited each time the sheet opens.
   useEffect(() => {
     if (open && range.ready) {
-      const p = partsOf(picking === 'out' ? range.checkOut : range.checkIn, system);
+      const p = partsOf(mode === 'out' ? range.checkOut : range.checkIn, system);
       setView({ y: p.y, m: p.m });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, system]);
+  }, [open, mode, system]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -39,27 +45,22 @@ export default function DateRangeSheet({ open, picking, onPicking, range, onClos
   }, [open, onClose]);
 
   const cells = useMemo(() => (view ? monthCells(system, view) : []), [system, view]);
-  if (!open || !view) return null;
+  if (!open || !view || !range.ready) return null;
 
   const atFirstMonth = view.y * 12 + view.m <= todayParts.y * 12 + todayParts.m;
 
   const choose = (iso) => {
-    if (iso < today) return;
-    if (picking === 'out' && iso > range.checkIn) {
-      range.changeCheckOut(iso);
-      onClose();
-      return;
-    }
-    range.changeCheckIn(iso);
-    range.changeCheckOut(addDays(iso, 1));
-    onPicking('out');
+    if (iso < firstAllowed) return;
+    if (mode === 'in') range.changeCheckIn(iso);
+    else range.changeCheckOut(iso);
+    onClose();
   };
 
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.sheet} role="dialog" aria-modal="true" aria-label={t('selectDates')} onClick={(event) => event.stopPropagation()}>
+      <div className={styles.sheet} role="dialog" aria-modal="true" aria-label={mode === 'in' ? t('pickCheckIn') : t('pickCheckOut')} onClick={(event) => event.stopPropagation()}>
         <span className={styles.handle} aria-hidden="true" />
-        <p className={styles.hint}>{picking === 'in' ? t('pickCheckIn') : t('pickCheckOut')}</p>
+        <p className={styles.hint}>{mode === 'in' ? t('pickCheckIn') : t('pickCheckOut')}</p>
 
         <div className={styles.nav}>
           <button type="button" aria-label={t('prevMonth')} disabled={atFirstMonth} onClick={() => setView(shiftMonth(view, -1))}><Chevron /></button>
@@ -68,19 +69,20 @@ export default function DateRangeSheet({ open, picking, onPicking, range, onClos
         </div>
 
         <div className={styles.week} aria-hidden="true">
-          {WEEKDAYS[system].map((label, i) => <span key={i}>{label}</span>)}
+          {WEEKDAYS[lang].map((label, i) => <span key={i}>{label}</span>)}
         </div>
 
         <div className={styles.grid}>
           {cells.map((cell, i) => {
             if (!cell) return <span key={`blank-${i}`} />;
-            const past = cell.iso < today;
-            const isStart = cell.iso === range.checkIn;
-            const isEnd = cell.iso === range.checkOut;
-            const inside = cell.iso > range.checkIn && cell.iso < range.checkOut;
-            const className = [styles.day, past && styles.past, (isStart || isEnd) && styles.edge, inside && styles.inside, cell.iso === today && styles.today].filter(Boolean).join(' ');
+            const disabled = cell.iso < firstAllowed;
+            const selected = cell.iso === (mode === 'in' ? range.checkIn : range.checkOut);
+            // In check-out mode the stay itself is tinted, with check-in marked as the start.
+            const isAnchor = mode === 'out' && cell.iso === range.checkIn;
+            const inside = mode === 'out' && cell.iso > range.checkIn && cell.iso < range.checkOut;
+            const className = [styles.day, disabled && styles.past, selected && styles.edge, isAnchor && styles.anchor, inside && styles.inside, cell.iso === today && styles.today].filter(Boolean).join(' ');
             return (
-              <button key={cell.iso} type="button" className={className} disabled={past} aria-pressed={isStart || isEnd} aria-label={formatDay(cell.iso, lang, true)} onClick={() => choose(cell.iso)}>
+              <button key={cell.iso} type="button" className={className} disabled={disabled} aria-pressed={selected} aria-label={formatDay(cell.iso, lang, true, 'persian')} onClick={() => choose(cell.iso)}>
                 {formatNumber(cell.day, lang)}
               </button>
             );
@@ -89,11 +91,10 @@ export default function DateRangeSheet({ open, picking, onPicking, range, onClos
 
         <div className={styles.footer}>
           <p>
-            <strong>{formatDay(range.checkIn, lang)} – {formatDay(range.checkOut, lang)}</strong>
+            <strong>{formatDay(mode === 'in' ? range.checkIn : range.checkOut, lang, true, 'persian')}</strong>
             <span>{t('nights', { n: range.nights })}</span>
           </p>
-          <button type="button" className={styles.todayButton} onClick={() => setView({ y: todayParts.y, m: todayParts.m })}>{t('goToday')}</button>
-          <button type="button" className={styles.doneButton} onClick={onClose}>{t('done')}</button>
+          {mode === 'in' && <button type="button" className={styles.todayButton} onClick={() => choose(today)}>{t('goToday')}</button>}
         </div>
       </div>
     </div>

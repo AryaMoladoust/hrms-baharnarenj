@@ -1,0 +1,57 @@
+.about { width: min(720px, calc(100% - 28px)); margin: 0 auto; padding: 8px 0 56px; }
+
+.title { margin: 40px 0 16px; font-family: var(--font-display); font-size: 34px; line-height: 1.4; }
+.title::after { content: ''; display: block; width: 64px; height: 4px; margin-top: 6px; border-radius: 999px; background: var(--amber); }
+
+.mosaic { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: 420px; }
+.photo { overflow: hidden; border-radius: 22px; box-shadow: 0 10px 28px rgba(30, 42, 36, .18); }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+.big { grid-row: 1 / span 2; border-radius: 999px 999px 22px 22px; border: 3px solid var(--amber); }
+.small { border-radius: 22px 22px 22px 8px; }
+
+.lead { margin: 18px 0 0; font-size: 16px; line-height: 2.1; }
+.slogan { margin: 6px 0 0; font-family: var(--font-display); font-size: 24px; color: var(--accent); }
+
+.rules, .parkingRules { display: grid; gap: 12px; }
+
+.rule {
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: 0 6px 18px rgba(30, 42, 36, .06);
+}
+.ruleIcon { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--amber) 28%, transparent); color: var(--primary); }
+.rule h3 { margin: 0 0 2px; font-size: 17px; }
+.rule p { margin: 0; line-height: 2; color: var(--ink); }
+
+.parking { margin-top: 12px; display: grid; gap: 12px; }
+.doorPhoto { height: 220px; overflow: hidden; border-radius: 120px 120px 22px 22px; border: 3px solid var(--amber); box-shadow: 0 10px 28px rgba(30, 42, 36, .18); }
+.doorPhoto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
+
+.support { margin-top: 28px; }
+
+.thanks {
+  margin: 28px 0 0;
+  padding: 18px;
+  text-align: center;
+  border-radius: 22px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  line-height: 2;
+}
+
+.footer { margin-top: 28px; display: grid; justify-items: center; gap: 0; text-align: center; }
+.footer strong { font-family: var(--font-display); font-size: 32px; color: var(--primary); line-height: 1.4; }
+.footer span { color: var(--muted); font-size: 14px; }
+
+@media (min-width: 900px) {
+  /* The two small photos are portrait: a taller, narrower-than-before mosaic crops them far less (less zoom). */
+  .mosaic { grid-template-columns: 1.25fr 1fr; height: 540px; }
+  .parking { grid-template-columns: 260px 1fr; align-items: center; gap: 24px; }
+  .doorPhoto { height: 320px; }
+}

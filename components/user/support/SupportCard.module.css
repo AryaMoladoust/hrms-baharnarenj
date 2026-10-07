@@ -1,0 +1,71 @@
+.card {
+  --card-bg: var(--surface);
+  --card-line: var(--line);
+  --card-ink: var(--ink);
+  --card-muted: var(--muted);
+  --chip-bg: color-mix(in srgb, var(--amber) 28%, transparent);
+  --chip-ink: var(--primary);
+  --call-bg: var(--primary);
+  --call-ink: var(--on-primary);
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--card-line);
+  border-radius: 24px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  box-shadow: 0 6px 18px rgba(30, 42, 36, .06);
+}
+
+/* Inside the dark side menu. */
+.night {
+  --card-bg: rgba(247, 241, 220, .06);
+  --card-line: rgba(247, 241, 220, .18);
+  --card-ink: #f7f1dc;
+  --card-muted: #cfc9b3;
+  --chip-bg: rgba(247, 241, 220, .1);
+  --chip-ink: var(--amber);
+  --call-bg: var(--amber);
+  --call-ink: var(--night);
+  padding: 14px;
+  gap: 12px;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.title { margin: 0; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 800; line-height: 1.5; }
+.title > span:last-child { display: grid; }
+.title small { font-size: 13px; font-weight: 400; color: var(--card-muted); }
+.titleIcon, .icon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--chip-bg);
+  color: var(--chip-ink);
+}
+.icon { width: 36px; height: 36px; }
+.night .titleIcon { width: 40px; height: 40px; }
+
+.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.list li { display: flex; align-items: center; gap: 12px; font-size: 15px; line-height: 1.9; }
+.night .list li { font-size: 14px; line-height: 1.8; }
+.phoneLine { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.phoneLine a { font-weight: 800; letter-spacing: .02em; }
+
+.call {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 16px;
+  background: var(--call-bg);
+  color: var(--call-ink);
+  font-size: 16px;
+  font-weight: 800;
+}
+.night .call { min-height: 48px; font-size: 15px; }
+.call:active { transform: scale(.98); }

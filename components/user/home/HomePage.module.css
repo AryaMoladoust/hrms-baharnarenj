@@ -1,11 +1,11 @@
 .page { min-height: 100vh; }
 
-/* Hero: the guesthouse at night, framed by the arched doorway shape from its own courtyard. */
+/* Hero: kept short on phones so the date card is visible without scrolling. */
 .hero {
   position: relative;
-  padding: 88px 16px 56px;
+  padding: 84px 16px 36px;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 38%, rgba(240, 166, 58, .22), transparent 70%),
+    radial-gradient(ellipse 70% 60% at 25% 70%, rgba(240, 166, 58, .22), transparent 70%),
     var(--night);
   color: #f7f1dc;
 }
@@ -14,36 +14,36 @@
   width: min(1120px, 100%);
   margin: 0 auto;
   display: grid;
-  gap: 28px;
-  justify-items: center;
-  text-align: center;
-}
-
-.arch {
-  position: relative;
-  width: min(74vw, 340px);
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: 999px 999px 22px 22px;
-  box-shadow: 0 0 0 3px var(--amber), 0 0 70px rgba(240, 166, 58, .38);
-  animation: glow 5s ease-in-out infinite alternate;
-}
-.arch img { object-fit: cover; }
-
-@keyframes glow {
-  from { box-shadow: 0 0 0 3px var(--amber), 0 0 50px rgba(240, 166, 58, .25); }
-  to { box-shadow: 0 0 0 3px var(--amber), 0 0 85px rgba(240, 166, 58, .5); }
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
 }
 
 .copy h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(36px, 10vw, 60px);
+  font-size: clamp(32px, 9vw, 60px);
   font-weight: 700;
-  line-height: 1.35;
-  text-wrap: balance;
+  line-height: 1.45;
 }
-.copy p { max-width: 46ch; margin: 14px auto 0; font-size: 16px; line-height: 2; color: #d9d3bd; }
+.copy p { margin: 6px 0 0; font-size: 15px; line-height: 1.9; color: #d9d3bd; }
+.long { display: none; }
+
+.arch {
+  position: relative;
+  width: 124px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 999px 999px 18px 18px;
+  box-shadow: 0 0 0 3px var(--amber), 0 0 40px rgba(240, 166, 58, .35);
+  animation: glow 5s ease-in-out infinite alternate;
+}
+.arch img { object-fit: cover; }
+
+@keyframes glow {
+  from { box-shadow: 0 0 0 3px var(--amber), 0 0 28px rgba(240, 166, 58, .25); }
+  to { box-shadow: 0 0 0 3px var(--amber), 0 0 52px rgba(240, 166, 58, .5); }
+}
 
 /* Clay roof tiles hanging off the hero's edge: the page literally has an eave. */
 .eave {
@@ -59,7 +59,7 @@
   position: relative;
   z-index: 2;
   width: min(960px, calc(100% - 28px));
-  margin: 30px auto 0;
+  margin: 24px auto 0;
   padding: 14px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -83,7 +83,7 @@
 }
 .searchButton:disabled { opacity: .6; cursor: progress; }
 
-.rooms { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 40px 0 72px; }
+.rooms { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 24px; }
 .roomsHead { margin-bottom: 16px; }
 .roomsHead h2 { margin: 0; font-family: var(--font-display); font-size: 34px; line-height: 1.4; }
 .roomsHead p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
@@ -93,9 +93,10 @@
 
 @media (min-width: 900px) {
   .hero { padding: 120px 24px 80px; }
-  .heroInner { grid-template-columns: 1fr auto; gap: 72px; text-align: right; align-items: center; justify-items: stretch; }
-  .arch { width: 400px; justify-self: end; }
-  .copy p { margin-inline: 0; }
+  .heroInner { gap: 72px; }
+  .copy p { font-size: 17px; }
+  .long { display: block; }
+  .arch { width: 360px; border-radius: 999px 999px 24px 24px; }
   .search { grid-template-columns: 1fr 1fr auto; margin-top: 36px; }
   .searchButton { grid-column: auto; padding: 0 32px; }
   .grid { gap: 16px; }

@@ -51,6 +51,11 @@ export default function RoomDetail({ slug }) {
             {booked ? t('bookedUntil', { date: formatDay(info.bookedUntil, lang) }) : t('free')}
           </p>
           <p className={styles.desc}>{lang === 'fa' ? room.description : room.descriptionEn}</p>
+          {(lang === 'fa' ? room.features : room.featuresEn).length > 0 && (
+            <ul className={styles.features}>
+              {(lang === 'fa' ? room.features : room.featuresEn).map((feature) => <li key={feature}>{feature}</li>)}
+            </ul>
+          )}
 
           <h2>{t('datesTitle')}</h2>
           <div className={styles.dates}>

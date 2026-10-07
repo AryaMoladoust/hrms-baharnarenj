@@ -9,6 +9,9 @@
 .statusBooked { color: #b3402a; }
 .desc { margin: 8px 0 0; color: var(--muted); line-height: 2; }
 
+.features { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.features li { padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; background: var(--surface); }
+
 .dates { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .plans { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }

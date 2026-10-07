@@ -1,5 +1,7 @@
+import Script from 'next/script';
 import { Vazirmatn, Aref_Ruqaa, Cormorant_Garamond } from 'next/font/google';
 import { PreferencesProvider } from '@/components/providers/Preferences';
+import BottomNav from '@/components/user/nav/BottomNav';
 import './globals.css';
 
 const body = Vazirmatn({ subsets: ['arabic', 'latin'], variable: '--font-body', display: 'swap' });
@@ -11,17 +13,18 @@ export const metadata = {
   description: 'سامانه رزرو اقامتگاه بهارنارنج',
 };
 
-// Runs before first paint so the saved theme/language never flashes.
-const preferenceScript = `(function(){try{var d=document.documentElement;var t=localStorage.getItem('bn-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t;if(localStorage.getItem('bn-lang')==='en'){d.lang='en';d.dir='ltr'}}catch(e){}})();`;
+// Runs before first paint so a saved English choice never flashes Persian first.
+const preferenceScript = `(function(){try{if(localStorage.getItem('bn-lang')==='en'){var d=document.documentElement;d.lang='en';d.dir='ltr'}}catch(e){}})();`;
 
 export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning className={`${body.variable} ${displayFa.variable} ${displayEn.variable}`}>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: preferenceScript }} />
-      </head>
       <body>
-        <PreferencesProvider>{children}</PreferencesProvider>
+        <Script id="bn-lang" strategy="beforeInteractive">{preferenceScript}</Script>
+        <PreferencesProvider>
+          {children}
+          <BottomNav />
+        </PreferencesProvider>
       </body>
     </html>
   );

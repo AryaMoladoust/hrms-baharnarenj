@@ -1,13 +1,14 @@
 /* Design tokens. To restyle the whole site, change values here, not in components. */
 :root {
-  --night: #0f1e19;        /* hero ground, always dark: the guesthouse at night */
+  /* One palette for the whole site (no themes). Change colors here only. */
+  --night: #0f1e19;        /* hero + side menu: the guesthouse at night */
   --amber: #f0a63a;        /* lantern light */
   --roof: #a8432b;         /* Gilan roof tile */
-  --bg: #eef0e2;
-  --surface: #fafaf2;
-  --ink: #16251f;
-  --muted: #586a60;
-  --line: #d3d8c4;
+  --bg: #f4ecd8;           /* warm parchment: the page background */
+  --surface: #fbf7ea;
+  --ink: #1e2a24;
+  --muted: #5e6b60;
+  --line: #d9cdb0;
   --primary: #1d5a47;
   --on-primary: #f7f4e6;
   --accent: #b4531a;
@@ -16,21 +17,9 @@
   --tone-bahar: #a6d08c;
   --tone-tabestan: #8dcbe3;
   --tone-paeez: #f3cb5a;
-  --tone-zemestan: #f6f8f5;
+  --tone-zemestan: #f8faf6;
   --tone-suite: #24493b;
   color-scheme: light;
-}
-
-:root[data-theme='dark'] {
-  --bg: #0b1612;
-  --surface: #13251f;
-  --ink: #ede6d2;
-  --muted: #9db2a7;
-  --line: #243b33;
-  --primary: #f0a63a;
-  --on-primary: #14211b;
-  --accent: #f0a63a;
-  color-scheme: dark;
 }
 
 :root[lang='en'] { --font-display: var(--font-display-en), serif; }
@@ -56,4 +45,11 @@ img { max-width: 100%; display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Lets the bottom navigation's notch slide smoothly between pages (see components/user/nav/BottomNav). */
+@property --nav-i {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
 }

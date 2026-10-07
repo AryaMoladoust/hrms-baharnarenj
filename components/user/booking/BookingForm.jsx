@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/user/header/Header';
@@ -12,6 +12,7 @@ import { addonQuantity, ADDONS, calculateQuote } from '@/lib/pricing';
 import { isValidMobile, isValidNationalId, normalizeDigits } from '@/lib/booking/validation';
 import { submitReservation } from '@/lib/booking/submit';
 import { formatDay, formatNumber } from '@/lib/dates';
+import TermsModal from './TermsModal';
 import styles from './BookingForm.module.css';
 
 const ADDON_KEYS = { breakfast: 'addonBreakfast', hygiene: 'addonHygiene' };
@@ -31,6 +32,7 @@ export default function BookingForm({ slug }) {
   const [form, setForm] = useState({ fullName: '', mobile: '', nationalId: '' });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle');
+  const [termsOpen, setTermsOpen] = useState(false);
 
   useEffect(() => {
     if (!range.ready) return;
@@ -41,7 +43,8 @@ export default function BookingForm({ slug }) {
   const num = (value) => formatNumber(value, lang);
   const setField = (name) => (event) => setForm((prev) => ({ ...prev, [name]: event.target.value }));
 
-  const onSubmit = async (event) => {
+  // Step 1: validate the form, then ask the guest to accept the terms.
+  const onSubmit = (event) => {
     event.preventDefault();
     const next = {};
     if (form.fullName.trim().length < 3) next.fullName = t('errName');
@@ -49,7 +52,14 @@ export default function BookingForm({ slug }) {
     if (!isValidNationalId(form.nationalId)) next.nationalId = t('errNationalId');
     setErrors(next);
     if (Object.keys(next).length) return;
+    setTermsOpen(true);
+  };
 
+  const closeTerms = useCallback(() => setTermsOpen(false), []);
+
+  // Step 2: the guest accepted the terms in the popup -> create the reservation and go to the payment gateway.
+  const confirmAndPay = async () => {
+    setTermsOpen(false);
     setStatus('sending');
     const result = await submitReservation({
       slug, guests, addons: selected,
@@ -57,8 +67,10 @@ export default function BookingForm({ slug }) {
       fullName: form.fullName.trim(),
       mobile: normalizeDigits(form.mobile),
       nationalId: normalizeDigits(form.nationalId),
+      termsAccepted: true,
     });
     if (result.paymentUrl) window.location.href = result.paymentUrl;
+    else setStatus('idle');
   };
 
   const booked = info?.status === 'booked';
@@ -161,6 +173,7 @@ export default function BookingForm({ slug }) {
           </button>
         </aside>
       </form>
+      <TermsModal open={termsOpen} onClose={closeTerms} onAccept={confirmAndPay} />
     </main>
   );
 }

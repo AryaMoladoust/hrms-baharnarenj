@@ -1,20 +1,18 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import Image from 'next/image';
 import { usePreferences } from '@/components/providers/Preferences';
 import styles from './RoomGallery.module.css';
 
 // Swipeable photo slider (CSS scroll-snap). Works in RTL and LTR; shows a season-colored placeholder until a photo file exists.
+// Photos go through next/image: resized per device, served as WebP/AVIF. Only the first photo is preloaded; the rest load lazily as the guest swipes.
 export default function RoomGallery({ room }) {
-  const { t } = usePreferences();
+  const { t, lang } = usePreferences();
   const trackRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [missing, setMissing] = useState({});
-  const [mounted, setMounted] = useState(false);
   const last = room.images.length - 1;
-
-  // Images load only after hydration so a failed file can reliably fall back to the placeholder.
-  useEffect(() => setMounted(true), []);
 
   const onScroll = () => {
     const el = trackRef.current;
@@ -36,11 +34,13 @@ export default function RoomGallery({ room }) {
             <svg className={styles.placeholder} viewBox="0 0 40 52" aria-hidden="true">
               <path d="M4 50V20C4 9 11 3 20 3s16 6 16 17v30z" fill="none" stroke="currentColor" strokeWidth="1.6" />
             </svg>
-            {mounted && !missing[file] && (
-              <img
+            {!missing[file] && (
+              <Image
                 src={`${room.imageDir}/${file}`}
-                alt=""
-                loading={i === 0 ? 'eager' : 'lazy'}
+                alt={`${lang === 'fa' ? room.name : room.nameEn} (${i + 1}/${room.images.length})`}
+                fill
+                sizes="(min-width: 900px) 700px, 100vw"
+                priority={i === 0}
                 onError={() => setMissing((prev) => ({ ...prev, [file]: true }))}
               />
             )}

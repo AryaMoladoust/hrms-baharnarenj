@@ -38,7 +38,6 @@
 }
 
 .iconButton { padding: 0; }
-.lantern { background: var(--amber); border-color: var(--amber); color: var(--night); }
 
 .menuIcon { width: 20px; display: grid; gap: 4px; }
 .menuIcon i { display: block; height: 2px; border-radius: 999px; background: currentColor; }
@@ -117,10 +116,14 @@
 .owner strong { font-size: 16px; }
 .owner small { color: #cfc9b3; font-size: 12px; }
 
-.drawerTools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.drawerTools button {
-  min-height: 44px; border: 1px solid rgba(247, 241, 220, .25); border-radius: 12px;
-  background: transparent; color: #f7f1dc; font-size: 14px; font-weight: 600;
+.langButton {
+  min-height: 48px;
+  border: 1px solid rgba(247, 241, 220, .25);
+  border-radius: 14px;
+  background: transparent;
+  color: #f7f1dc;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 /* Roof tiles along the menu's inner edge. */
@@ -152,4 +155,3 @@
 .solid .brand { color: var(--primary); }
 .solid .iconButton,
 .solid .textButton { border-color: var(--line); background: transparent; }
-.solid .lantern { background: var(--amber); border-color: var(--amber); color: var(--night); }
