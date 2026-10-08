@@ -74,7 +74,7 @@ export default function RoomDetail({ slug }) {
               <ul className={styles.plans}>
                 {ADDONS.map((key) => (
                   <li key={key}>
-                    <span><strong>{t(ADDON_KEYS[key][0])}</strong><small>{t(UNIT_KEYS[info.addons[key].unit])}</small></span>
+                    <span><strong>{t(ADDON_KEYS[key][0])}</strong><small>{t(UNIT_KEYS[info.addons[key].unit])}{info.addons[key].requires ? ` · ${t('addonWithBreakfast')}` : ''}</small></span>
                     <span className={styles.planPrice}><b dir="ltr">+{formatNumber(info.addons[key].price, lang)}</b> <small>{t('currency')}</small></span>
                   </li>
                 ))}

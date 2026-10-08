@@ -1,57 +1,86 @@
-.about { width: min(720px, calc(100% - 28px)); margin: 0 auto; padding: 8px 0 56px; }
+/* Night-green band: the page's second "night" after the hero. Arches rise into the parchment above it. */
+.band {
+  position: relative;
+  margin-top: 36px;
+  padding: 24px 0 40px;
+  background-color: var(--night);
+  background-image: radial-gradient(ellipse 80% 260px at 50% 0, rgba(240, 166, 58, .16), transparent 75%), var(--pattern-star-light);
+  color: #f7f1dc;
+}
+.band::before {
+  content: '';
+  position: absolute;
+  inset: -11px 0 auto;
+  height: 12px;
+  background: radial-gradient(circle at 50% 100%, var(--night) 0 9px, transparent 10px) 0 0 / 20px 12px repeat-x;
+}
 
-.title { margin: 40px 0 16px; font-family: var(--font-display); font-size: 34px; line-height: 1.4; }
+.about { width: min(720px, calc(100% - 28px)); margin: 0 auto; }
+
+.title { margin: 32px 0 14px; font-family: var(--font-display); font-size: 36px; line-height: 1.4; color: #f7f1dc; }
 .title::after { content: ''; display: block; width: 64px; height: 4px; margin-top: 6px; border-radius: 999px; background: var(--amber); }
 
 .mosaic { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: 420px; }
-.photo { overflow: hidden; border-radius: 22px; box-shadow: 0 10px 28px rgba(30, 42, 36, .18); }
+.photo { overflow: hidden; box-shadow: 0 12px 30px rgba(0, 0, 0, .35); }
 .photo img { width: 100%; height: 100%; object-fit: cover; }
 .big { grid-row: 1 / span 2; border-radius: 999px 999px 22px 22px; border: 3px solid var(--amber); }
 .small { border-radius: 22px 22px 22px 8px; }
 
-.lead { margin: 18px 0 0; font-size: 16px; line-height: 2.1; }
-.slogan { margin: 6px 0 0; font-family: var(--font-display); font-size: 24px; color: var(--accent); }
+.lead { margin: 20px 0 0; font-size: 17px; line-height: 2.1; }
+.text { margin: 10px 0 0; line-height: 2.1; color: #d9d3bd; }
+.slogan { margin: 22px 0 0; font-family: var(--font-display); font-size: 26px; color: var(--amber); }
 
-.rules, .parkingRules { display: grid; gap: 12px; }
+.rules, .parkingRules { margin-top: 14px; display: grid; gap: 12px; }
+.parkingRules { margin-top: 0; }
 
 .rule {
   padding: 16px;
   display: flex;
   gap: 14px;
   align-items: flex-start;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(247, 241, 220, .16);
   border-radius: 22px;
-  background: var(--surface);
-  box-shadow: 0 6px 18px rgba(30, 42, 36, .06);
+  background: rgba(247, 241, 220, .07);
 }
-.ruleIcon { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--amber) 28%, transparent); color: var(--primary); }
-.rule h3 { margin: 0 0 2px; font-size: 17px; }
-.rule p { margin: 0; line-height: 2; color: var(--ink); }
+.ruleIcon { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--amber); color: var(--night); }
+.rule h3 { margin: 0 0 2px; font-size: 17px; color: var(--amber); }
+.rule p { margin: 0; line-height: 2; }
 
-.parking { margin-top: 12px; display: grid; gap: 12px; }
-.doorPhoto { height: 220px; overflow: hidden; border-radius: 120px 120px 22px 22px; border: 3px solid var(--amber); box-shadow: 0 10px 28px rgba(30, 42, 36, .18); }
-.doorPhoto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
-
-.support { margin-top: 28px; }
+.parking { margin-top: 14px; display: grid; gap: 14px; justify-items: stretch; }
+.doorPhoto {
+  width: min(220px, 62%);
+  aspect-ratio: 4 / 5;
+  justify-self: center;
+  overflow: hidden;
+  border-radius: 120px 120px 22px 22px;
+  border: 3px solid var(--amber);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+}
+.doorPhoto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 
 .thanks {
-  margin: 28px 0 0;
+  margin: 30px 0 0;
   padding: 18px;
   text-align: center;
   border-radius: 22px;
-  background: var(--primary);
-  color: var(--on-primary);
-  font-weight: 700;
+  background: var(--amber);
+  color: var(--night);
+  font-weight: 800;
   line-height: 2;
 }
+.support { margin-top: 18px; }
 
-.footer { margin-top: 28px; display: grid; justify-items: center; gap: 0; text-align: center; }
-.footer strong { font-family: var(--font-display); font-size: 32px; color: var(--primary); line-height: 1.4; }
-.footer span { color: var(--muted); font-size: 14px; }
+.footer { margin-top: 30px; display: grid; justify-items: center; text-align: center; }
+.footer strong { font-family: var(--font-display); font-size: 34px; color: var(--amber); line-height: 1.4; }
+.footer span { color: #cfc9b3; font-size: 14px; }
+
+/* The three photos are portrait (arch ~1:2.2, the other two ~3:4). On wider screens the mosaic is kept narrow and tall so each box
+   has about the photo's own proportions: almost nothing is cropped, so nothing looks zoomed in. */
+@media (min-width: 600px) {
+  .mosaic { width: min(100%, 540px); margin-inline: auto; grid-template-columns: 1.25fr 1fr; height: 620px; }
+}
 
 @media (min-width: 900px) {
-  /* The two small photos are portrait: a taller, narrower-than-before mosaic crops them far less (less zoom). */
-  .mosaic { grid-template-columns: 1.25fr 1fr; height: 540px; }
-  .parking { grid-template-columns: 260px 1fr; align-items: center; gap: 24px; }
-  .doorPhoto { height: 320px; }
+  .parking { grid-template-columns: 240px 1fr; align-items: center; gap: 28px; }
+  .doorPhoto { width: 240px; }
 }

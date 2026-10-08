@@ -41,6 +41,14 @@ export default function BookingForm({ slug }) {
 
   const quote = useMemo(() => (info ? calculateQuote({ info, selected, nights: range.nights, guests }) : null), [info, selected, range.nights, guests]);
   const num = (value) => formatNumber(value, lang);
+
+  // The hygiene pack is sold together with breakfast: ticking the pack ticks breakfast, unticking breakfast unticks the pack.
+  const toggleAddon = (key, checked) => setSelected((prev) => {
+    const next = { ...prev, [key]: checked };
+    if (key === 'hygiene' && checked) next.breakfast = true;
+    if (key === 'breakfast' && !checked) next.hygiene = false;
+    return next;
+  });
   const setField = (name) => (event) => setForm((prev) => ({ ...prev, [name]: event.target.value }));
 
   // Step 1: validate the form, then ask the guest to accept the terms.
@@ -107,10 +115,10 @@ export default function BookingForm({ slug }) {
               const qty = addonQuantity(addon.unit, guests, range.nights);
               return (
                 <label key={key} className={on ? styles.addonOn : styles.addon}>
-                  <input type="checkbox" checked={on} onChange={(event) => setSelected((prev) => ({ ...prev, [key]: event.target.checked }))} />
+                  <input type="checkbox" checked={on} onChange={(event) => toggleAddon(key, event.target.checked)} />
                   <span>
                     <strong>{t(ADDON_KEYS[key])}</strong>
-                    <small>{t(UNIT_KEYS[addon.unit])}</small>
+                    <small>{t(UNIT_KEYS[addon.unit])}{addon.requires ? ` · ${t('addonWithBreakfast')}` : ''}</small>
                     {on && (
                       <em>
                         {t(QTY_KEYS[addon.unit], { guests: num(guests), nights: num(range.nights) })}
