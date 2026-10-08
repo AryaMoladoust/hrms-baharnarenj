@@ -1,4 +1,4 @@
-import Script from 'next/script';
+import { cookies } from 'next/headers';
 import { Vazirmatn, Aref_Ruqaa, Cormorant_Garamond } from 'next/font/google';
 import { PreferencesProvider } from '@/components/providers/Preferences';
 import BottomNav from '@/components/user/nav/BottomNav';
@@ -13,15 +13,16 @@ export const metadata = {
   description: 'سامانه رزرو اقامتگاه بهارنارنج',
 };
 
-// Runs before first paint so a saved English choice never flashes Persian first.
-const preferenceScript = `(function(){try{if(localStorage.getItem('bn-lang')==='en'){var d=document.documentElement;d.lang='en';d.dir='ltr'}}catch(e){}})();`;
+// The language lives in a cookie, so the server renders the right <html lang dir> and the right text from the first byte.
+// No inline <script>, no flash of the wrong language, no server/client mismatch.
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get('bn-lang')?.value === 'en' ? 'en' : 'fa';
 
-export default function RootLayout({ children }) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning className={`${body.variable} ${displayFa.variable} ${displayEn.variable}`}>
+    <html lang={lang} dir={lang === 'fa' ? 'rtl' : 'ltr'} className={`${body.variable} ${displayFa.variable} ${displayEn.variable}`}>
       <body>
-        <Script id="bn-lang" strategy="beforeInteractive">{preferenceScript}</Script>
-        <PreferencesProvider>
+        <PreferencesProvider initialLang={lang}>
           {children}
           <BottomNav />
         </PreferencesProvider>

@@ -1,0 +1,23 @@
+.page { min-height: 100vh; padding-bottom: 40px; }
+
+.hero {
+  position: relative;
+  padding: 92px 16px 48px;
+  background-color: var(--night);
+  background-image: radial-gradient(ellipse 80% 55% at 50% 90%, rgba(240, 166, 58, .2), transparent 70%), var(--pattern-star-light);
+  color: #f7f1dc;
+}
+.heroInner { width: min(720px, 100%); margin: 0 auto; }
+.heroInner h1 { margin: 0; font-family: var(--font-display); font-size: 48px; line-height: 1.35; }
+.heroInner p { margin: 6px 0 0; max-width: 40ch; color: #d9d3bd; line-height: 2; }
+
+.eave {
+  position: absolute;
+  inset: auto 0 -13px;
+  height: 14px;
+  background:
+    linear-gradient(var(--roof), var(--roof)) 0 0 / 100% 4px no-repeat,
+    radial-gradient(circle at 50% 4px, var(--roof) 0 10px, transparent 11px) 0 0 / 22px 14px repeat-x;
+}
+
+.content { width: min(720px, calc(100% - 28px)); margin: 32px auto 0; }

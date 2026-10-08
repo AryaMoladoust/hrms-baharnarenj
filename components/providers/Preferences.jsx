@@ -1,24 +1,19 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { translate } from '@/lib/i18n';
 
 const PreferencesContext = createContext(null);
 
-export function PreferencesProvider({ children }) {
-  const [lang, setLang] = useState('fa');
-
-  // The inline script in layout.jsx already set lang/dir before first paint; mirror it into state.
-  useEffect(() => {
-    setLang(document.documentElement.lang === 'en' ? 'en' : 'fa');
-  }, []);
+export function PreferencesProvider({ children, initialLang = 'fa' }) {
+  const [lang, setLang] = useState(initialLang);
 
   const toggleLang = useCallback(() => {
     const next = lang === 'fa' ? 'en' : 'fa';
     const root = document.documentElement;
     root.lang = next;
     root.dir = next === 'fa' ? 'rtl' : 'ltr';
-    try { localStorage.setItem('bn-lang', next); } catch {}
+    document.cookie = `bn-lang=${next}; path=/; max-age=31536000; samesite=lax`; // read by app/layout.jsx on the next request
     setLang(next);
   }, [lang]);
 

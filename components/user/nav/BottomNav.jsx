@@ -9,17 +9,17 @@ const icon = (paths) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths}</svg>
 );
 
-// Order = order on screen (first item is on the right in Persian, on the left in English).
+// Order = order on screen (first item is on the right in Persian, on the left in English). Home is the middle one.
 const ITEMS = [
-  { href: '/', label: 'navHome', icon: icon(<path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z" />) },
   { href: '/rooms', label: 'navRooms', icon: icon(<><path d="M5 21V10a7 7 0 0114 0v11" /><path d="M9 21v-9a3 3 0 016 0v9" /></>) },
+  { href: '/', label: 'navHome', icon: icon(<path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z" />) },
   { href: '/my-reservations', label: 'navMyReservations', icon: icon(<><rect x="4" y="5" width="16" height="16" rx="3" /><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4" /></>) },
 ];
 
 // Only the three main pages show the bar. Room detail and booking have their own bottom action bar, and owner pages are separate.
 function activeIndex(pathname) {
-  if (pathname === '/') return 0;
-  if (pathname === '/rooms') return 1;
+  if (pathname === '/rooms') return 0;
+  if (pathname === '/') return 1;
   if (pathname === '/my-reservations') return 2;
   return -1;
 }

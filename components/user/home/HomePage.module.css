@@ -3,7 +3,7 @@
 /* Hero: kept short on phones so the date card is visible without scrolling. */
 .hero {
   position: relative;
-  padding: 84px 16px 36px;
+  padding: 84px 16px 40px;
   background:
     radial-gradient(ellipse 70% 60% at 25% 70%, rgba(240, 166, 58, .22), transparent 70%),
     var(--night);
@@ -31,7 +31,7 @@
 
 .arch {
   position: relative;
-  width: 124px;
+  width: min(42vw, 168px);
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: 999px 999px 18px 18px;

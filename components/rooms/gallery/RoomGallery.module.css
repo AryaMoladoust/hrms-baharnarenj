@@ -2,7 +2,10 @@
   --tone: var(--tone-suite);
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 28px 28px;
+  /* The doorway arch of the guesthouse: elliptical dome on top, ringed in lantern amber. */
+  border: 3px solid var(--amber);
+  border-radius: 50% 50% 24px 24px / 30% 30% 24px 24px;
+  box-shadow: 0 0 46px rgba(240, 166, 58, .3);
   background: var(--tone);
 }
 .gallery[data-room='bahar'] { --tone: var(--tone-bahar); }
@@ -68,6 +71,3 @@
 }
 .dotActive::after { inset: 7px; background: var(--amber); box-shadow: 0 0 0 2px rgba(15, 30, 25, .5); }
 
-@media (min-width: 900px) {
-  .gallery { border-radius: 28px; }
-}

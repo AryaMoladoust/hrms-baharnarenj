@@ -1,44 +1,93 @@
 .page { min-height: 100vh; padding-bottom: 96px; }
 
-.layout { width: min(1120px, 100%); margin: 0 auto; }
+/* Night-green hero (same family as the home page): title, status and the arched photo gallery. */
+.hero {
+  position: relative;
+  padding: 84px 14px 44px;
+  background-color: var(--night);
+  background-image:
+    radial-gradient(ellipse 80% 45% at 50% 85%, rgba(240, 166, 58, .2), transparent 70%),
+    var(--pattern-star-light);
+  color: #f7f1dc;
+}
+.heroInner { width: min(1120px, 100%); margin: 0 auto; display: grid; gap: 18px; }
 
-.info { padding: 20px 16px 8px; }
-.info h1 { margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 1.4; }
-.info h2 { margin: 24px 0 10px; font-size: 16px; font-weight: 800; }
-.status, .statusBooked { margin: 0; font-size: 14px; font-weight: 800; color: var(--primary); }
-.statusBooked { color: #b3402a; }
-.desc { margin: 8px 0 0; color: var(--muted); line-height: 2; }
+.titleBlock h1 { margin: 0; display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-size: 46px; font-weight: 700; line-height: 1.35; }
+.dot { --tone: var(--tone-suite); width: 16px; height: 16px; flex: none; border-radius: 50%; background: var(--tone); box-shadow: 0 0 0 3px rgba(247, 241, 220, .28); }
+.dot[data-room='bahar'] { --tone: var(--tone-bahar); }
+.dot[data-room='tabestan'] { --tone: var(--tone-tabestan); }
+.dot[data-room='paeez'] { --tone: var(--tone-paeez); }
+.dot[data-room='zemestan'] { --tone: var(--tone-zemestan); }
+.dot[data-room='suite'] { --tone: var(--amber); }
 
-.features { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
-.features li { padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; background: var(--surface); }
+.chips { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { padding: 3px 13px; border-radius: 999px; background: var(--amber); color: var(--night); font-size: 12.5px; font-weight: 800; }
+.status, .statusBooked {
+  display: inline-flex; align-items: center; gap: 7px; padding: 3px 13px;
+  border: 1px solid rgba(247, 241, 220, .22); border-radius: 999px; background: rgba(247, 241, 220, .1);
+  font-size: 13px; font-weight: 800;
+}
+.status i, .statusBooked i { width: 9px; height: 9px; border-radius: 50%; background: #3ecf8e; box-shadow: 0 0 0 3px rgba(62, 207, 142, .25); }
+.statusBooked i { background: #ef6a5a; box-shadow: 0 0 0 3px rgba(239, 106, 90, .25); }
+
+.eave {
+  position: absolute;
+  inset: auto 0 -13px;
+  height: 14px;
+  background:
+    linear-gradient(var(--roof), var(--roof)) 0 0 / 100% 4px no-repeat,
+    radial-gradient(circle at 50% 4px, var(--roof) 0 10px, transparent 11px) 0 0 / 22px 14px repeat-x;
+}
+
+.content { width: min(1120px, calc(100% - 28px)); margin: 30px auto 0; display: grid; gap: 14px; }
+
+.card {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: 0 8px 22px rgba(30, 42, 36, .07);
+}
+.card h2, .priceCard h2 { margin: 0 0 12px; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; }
+.cardIcon { width: 38px; height: 38px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: var(--on-primary); }
 
 .dates { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-.plans { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
-.plans li {
-  min-height: 64px;
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border: 1.5px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface);
+/* The price card is deep green again, so the page keeps the green of the hero all the way down. */
+.priceCard {
+  padding: 18px 16px;
+  border: 1px solid rgba(247, 241, 220, .14);
+  border-radius: 24px;
+  background-color: var(--night);
+  background-image: radial-gradient(ellipse 70% 100% at 100% 0, rgba(240, 166, 58, .22), transparent 70%), var(--pattern-star-light);
+  color: #f7f1dc;
+  box-shadow: 0 14px 30px rgba(15, 30, 25, .3);
 }
-.plans li > span:first-child { display: grid; }
-.plans small { color: var(--muted); font-size: 12px; }
-.planPrice { text-align: end; }
-.planPrice s { display: block; font-size: 12px; opacity: .55; }
-.planPrice b { font-size: 17px; }
-
-.nightPrice { margin: 0; display: flex; align-items: baseline; gap: 8px; }
+.priceCard .cardIcon { background: var(--amber); color: var(--night); }
+.nightPrice { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 .nightPrice s { opacity: .55; font-size: 14px; }
-.nightPrice strong { font-size: 26px; }
-.nightPrice span { color: var(--muted); font-size: 13px; }
-.info h2 small { font-weight: 400; color: var(--muted); font-size: 12px; }
+.nightPrice strong { font-size: 36px; line-height: 1.2; color: var(--amber); }
+.nightPrice span { color: #d9d3bd; font-size: 14px; }
 
-.rule { margin: 12px 0 0; font-size: 13px; color: var(--muted); line-height: 1.9; }
+.priceCard h3 { margin: 18px 0 8px; font-size: 15px; }
+.priceCard h3 small { font-weight: 400; color: #cfc9b3; font-size: 12px; }
+.addons { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.addons li {
+  min-height: 62px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border: 1px solid rgba(247, 241, 220, .16); border-radius: 16px; background: rgba(247, 241, 220, .07);
+}
+.addons li > span:first-child { display: grid; }
+.addons small { color: #cfc9b3; font-size: 12px; }
+.addonPrice { text-align: end; white-space: nowrap; }
+.addonPrice b { font-size: 17px; color: var(--amber); }
+.rule { margin: 12px 0 0; font-size: 13px; color: #cfc9b3; line-height: 1.9; }
+
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.facts li { display: flex; align-items: center; gap: 10px; line-height: 1.7; }
+.tick { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--primary) 15%, transparent); color: var(--primary); }
+
+.policy { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.policy li { padding: 10px 14px; border-radius: 14px; background: var(--bg); font-size: 14px; line-height: 1.95; }
 
 .bar {
   position: fixed;
@@ -49,13 +98,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: var(--surface);
-  border-top: 1px solid var(--line);
+  background: var(--night);
+  border-top: 3px solid var(--roof);
+  color: #f7f1dc;
 }
-.barPrice { margin: 0; display: flex; align-items: baseline; gap: 6px; font-size: 13px; color: var(--muted); }
-.barPrice strong { font-size: 20px; color: var(--ink); }
-.barNote { margin: 0; display: grid; font-size: 13px; color: var(--muted); }
-.barNote strong { color: #b3402a; font-size: 15px; }
+.barPrice { margin: 0; display: flex; align-items: baseline; gap: 6px; font-size: 13px; color: #d9d3bd; }
+.barPrice strong { font-size: 22px; color: var(--amber); }
+.barNote { margin: 0; display: grid; font-size: 13px; color: #d9d3bd; }
+.barNote strong { color: #ff9a8a; font-size: 15px; }
 
 .book {
   min-height: 52px;
@@ -63,14 +113,16 @@
   display: grid;
   place-items: center;
   border-radius: 16px;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--amber);
+  color: var(--night);
   font-weight: 800;
   font-size: 16px;
 }
 
 @media (min-width: 900px) {
-  .layout { padding: 28px 24px 0; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
-  .info { padding: 0; }
+  .hero { padding: 120px 24px 64px; }
+  .heroInner { grid-template-columns: 1fr 430px; align-items: center; gap: 56px; }
+  .titleBlock h1 { font-size: 64px; }
+  .content { grid-template-columns: 1fr 1fr; align-items: start; margin-top: 40px; }
   .bar { padding-inline: max(16px, calc((100vw - 1120px) / 2 + 24px)); }
 }
