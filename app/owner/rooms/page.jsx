@@ -1,1 +1,10 @@
-export default function Page() { return <main style={{padding:32}}><h1>مدیریت اتاق‌ها</h1></main>; }
+import RoomsView from '@/components/owner/views/RoomsView';
+import { requireOwner } from '@/lib/owner/session';
+
+export const metadata = { title: 'اتاق‌ها | بهارنارنج', robots: { index: false } };
+export const dynamic = 'force-dynamic';
+
+export default async function Page() {
+  await requireOwner(); // not signed in -> /owner/login
+  return <RoomsView />;
+}

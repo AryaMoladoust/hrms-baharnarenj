@@ -1,0 +1,82 @@
+.shell { min-height: 100vh; }
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  background: rgba(15, 30, 25, .95);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 3px 0 var(--roof), 0 10px 24px rgba(0, 0, 0, .28);
+  color: #f7f1dc;
+}
+.inner { width: min(760px, calc(100% - 28px)); margin: 0 auto; padding: 8px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.spacer { height: 66px; }
+
+.titleBlock { display: grid; min-width: 0; }
+.titleBlock span { font-size: 11px; color: var(--amber); font-weight: 800; letter-spacing: .02em; }
+.titleBlock h1 { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tools { display: flex; align-items: center; gap: 8px; }
+.iconLink, .avatar {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(247, 241, 220, .3);
+  border-radius: 14px;
+  background: rgba(247, 241, 220, .06);
+  color: #f7f1dc;
+}
+.avatar { border-radius: 50%; background: var(--amber); border-color: var(--amber); color: var(--night); font-weight: 800; font-size: 17px; }
+.badge {
+  position: absolute;
+  top: -6px;
+  inset-inline-end: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #e5533d;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 0 0 2px var(--night);
+}
+
+.content { width: min(760px, calc(100% - 28px)); margin: 0 auto; padding: 16px 0 8px; display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+.content > * { min-width: 0; } /* wide children (the rooms calendar) scroll inside their card instead of stretching the page */
+
+.warning {
+  padding: 12px 14px;
+  display: grid;
+  gap: 2px;
+  border: 1.5px solid var(--amber);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--amber) 22%, var(--surface));
+  color: #5c4000;
+}
+.warning span { font-size: 13px; line-height: 1.8; }
+
+.toast {
+  position: fixed;
+  z-index: 50;
+  top: 76px;
+  inset-inline: 14px;
+  margin-inline: auto;
+  width: min(560px, calc(100% - 28px));
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: var(--night);
+  border: 1.5px solid var(--amber);
+  color: #f7f1dc;
+  font-weight: 700;
+  line-height: 1.8;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .35);
+  animation: drop .3s ease-out;
+}
+.toast[data-tone='bad'] { border-color: #ef6a5a; }
+@keyframes drop { from { transform: translateY(-14px); opacity: 0; } to { transform: none; opacity: 1; } }

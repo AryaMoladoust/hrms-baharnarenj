@@ -1,0 +1,21 @@
+.rooms { display: flex; flex-wrap: wrap; gap: 8px; }
+.room, .roomOn { min-height: 44px; padding: 0 14px; display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--ink); font-weight: 700; font-size: 14px; }
+.roomOn { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--surface)); box-shadow: 0 0 0 1px var(--primary); }
+.dates { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stepper { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.stepper > span { font-size: 13px; color: var(--muted); }
+.stepper > div { direction: ltr; display: flex; align-items: center; gap: 10px; }
+.stepper button { width: 46px; height: 46px; border: 0; border-radius: 14px; background: var(--primary); color: var(--on-primary); font-size: 24px; line-height: 1; }
+.stepper button:disabled { opacity: .35; }
+.stepper output { min-width: 84px; text-align: center; display: grid; }
+.stepper output b { font-family: var(--font-display); font-size: 34px; line-height: 1.1; color: var(--primary); }
+.stepper output small { font-size: 11px; color: var(--muted); }
+.addons { display: flex; flex-wrap: wrap; gap: 8px; }
+.addon, .addonOn { min-height: 48px; padding: 0 14px; display: inline-flex; align-items: center; gap: 10px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); font-weight: 700; font-size: 14px; cursor: pointer; }
+.addonOn { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--surface)); }
+.addon input, .addonOn input { width: 22px; height: 22px; margin: 0; accent-color: var(--primary); }
+.pay { display: grid; gap: 10px; }
+.hold { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.9; }
+.quote { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; border-radius: 16px; background: var(--night); color: #f7f1dc; }
+.quote strong { font-size: 20px; color: var(--amber); }

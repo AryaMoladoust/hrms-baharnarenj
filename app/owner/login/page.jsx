@@ -1,17 +1,10 @@
-import styles from './page.module.css';
+import { redirect } from 'next/navigation';
+import LoginView from '@/components/owner/views/LoginView';
+import { getSession } from '@/lib/owner/session';
 
-export default function OwnerLoginPage() {
-  return (
-    <main className={styles.page}>
-      <section className={styles.card}>
-        <h1>ورود مالک</h1>
-        <p>ورود به پنل مدیریت بهارنارنج</p>
-        <form className={styles.form}>
-          <label>نام کاربری یا ایمیل<input autoComplete="username" /></label>
-          <label>رمز عبور<input type="password" autoComplete="current-password" /></label>
-          <button type="submit">ورود</button>
-        </form>
-      </section>
-    </main>
-  );
+export const metadata = { title: 'ورود مالک | بهارنارنج', robots: { index: false } };
+
+export default async function OwnerLoginPage() {
+  if (await getSession()) redirect('/owner/dashboard'); // already signed in
+  return <LoginView />;
 }

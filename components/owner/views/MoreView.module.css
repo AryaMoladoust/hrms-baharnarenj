@@ -1,0 +1,10 @@
+.menu { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.menu a { min-height: 76px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); color: var(--ink); box-shadow: 0 6px 16px rgba(30, 42, 36, .06); }
+.icon { width: 48px; height: 48px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: var(--on-primary); }
+.text { flex: 1; display: grid; }
+.text strong { font-size: 16px; }
+.text small { color: var(--muted); font-size: 13px; }
+.badge { min-width: 26px; height: 26px; padding: 0 8px; display: grid; place-items: center; border-radius: 999px; background: #e5533d; color: #fff; font-size: 13px; }
+.buttons { display: grid; gap: 8px; }
+.buttons button { min-height: 50px; border: 1.5px solid var(--line); border-radius: 15px; background: transparent; color: var(--ink); font-size: 15px; font-weight: 800; }
+.logout { border-color: #b3402a !important; color: #b3402a !important; }

@@ -18,7 +18,8 @@ export default function RoomTile({ room, info, checkIn, checkOut }) {
   const booked = info?.status === 'booked';
   const discount = !booked && info?.discountPercent > 0 ? info.discountPercent : 0;
   const basePrice = info?.price;
-  const finalPrice = basePrice ? Math.round(basePrice * (1 - discount / 100)) : null;
+  // discount > 0 = owner's discount (badge + struck-through old price); a negative percent is a price increase (no badge).
+  const finalPrice = basePrice ? Math.round(basePrice * (1 - (info?.discountPercent || 0) / 100)) : null;
   const name = lang === 'fa' ? room.name : room.nameEn;
   const tag = lang === 'fa' ? room.tag : room.tagEn;
   const cover = room.images?.[0] ? `${room.imageDir}/${room.images[0]}` : null;

@@ -1,0 +1,8 @@
+.help { margin: 0 0 10px; font-size: 13.5px; line-height: 1.9; color: var(--muted); }
+.markAll { padding: 0; border: 0; background: transparent; color: var(--accent); font-size: 13px; font-weight: 800; }
+.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.list a { padding: 12px 14px; display: grid; gap: 2px; border: 1px solid var(--line); border-radius: 16px; background: var(--bg); color: var(--ink); }
+.list li[data-unread='true'] a { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 18%, var(--surface)); }
+.list strong { font-size: 15px; }
+.list span { font-size: 13.5px; line-height: 1.8; }
+.list small { color: var(--muted); font-size: 12px; }

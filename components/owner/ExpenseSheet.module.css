@@ -1,0 +1,4 @@
+.label { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+.cats { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat, .catOn { min-height: 44px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--ink); font-size: 14px; font-weight: 700; }
+.catOn { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--surface)); box-shadow: 0 0 0 1px var(--primary); color: var(--primary); }

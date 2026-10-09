@@ -27,8 +27,12 @@ export default function MyReservations() {
     if (Object.keys(next).length) return;
 
     setState({ phase: 'loading', items: [] });
-    const items = await lookupReservations({ fullName: fullName.trim(), nationalId: normalizeDigits(nationalId) });
-    setState({ phase: 'done', items });
+    try {
+      const items = await lookupReservations({ fullName: fullName.trim(), nationalId: normalizeDigits(nationalId) });
+      setState({ phase: 'done', items });
+    } catch {
+      setState({ phase: 'error', items: [] });
+    }
   };
 
   return (
@@ -55,6 +59,7 @@ export default function MyReservations() {
         </form>
 
         {state.phase === 'done' && state.items.length === 0 && <p className={styles.empty}>{t('myEmpty')}</p>}
+        {state.phase === 'error' && <p className={styles.empty}>{t('myError')}</p>}
 
         <ul className={styles.list}>
           {state.items.map((item) => {

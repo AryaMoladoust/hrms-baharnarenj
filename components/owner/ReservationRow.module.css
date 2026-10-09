@@ -1,0 +1,29 @@
+.row {
+  --tone: var(--tone-suite);
+  width: 100%;
+  min-height: 84px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: start;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 6px 16px rgba(30, 42, 36, .06);
+}
+.row[data-room='bahar'] { --tone: var(--tone-bahar); }
+.row[data-room='tabestan'] { --tone: var(--tone-tabestan); }
+.row[data-room='paeez'] { --tone: var(--tone-paeez); }
+.row[data-room='zemestan'] { --tone: #b9c9c0; }
+.row[data-room='suite'] { --tone: var(--amber); }
+.row[data-status='cancelled'] { opacity: .65; }
+.row[data-status='blocked'] { background: repeating-linear-gradient(135deg, var(--surface), var(--surface) 8px, color-mix(in srgb, var(--ink) 6%, var(--surface)) 8px, color-mix(in srgb, var(--ink) 6%, var(--surface)) 16px); }
+
+.stripe { align-self: stretch; width: 6px; flex: none; border-radius: 999px; background: var(--tone); }
+.main { flex: 1; min-width: 0; display: grid; gap: 3px; }
+.main strong { display: flex; align-items: center; gap: 6px; font-size: 15px; line-height: 1.6; }
+.dates { font-size: 13px; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.amount { font-size: 14px; font-weight: 800; white-space: nowrap; color: var(--primary); }

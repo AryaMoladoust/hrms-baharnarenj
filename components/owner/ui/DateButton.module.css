@@ -1,0 +1,6 @@
+.button { min-height: 62px; padding: 8px 14px; display: grid; align-content: center; justify-items: start; gap: 1px; border: 1.5px solid var(--line); border-radius: 15px; background: var(--bg); color: var(--ink); text-align: start; width: 100%; }
+.button span { font-size: 12px; color: var(--muted); }
+.button strong { font-size: 15px; line-height: 1.5; }
+.button:focus-visible { border-color: var(--primary); }
+.invalid { border-color: #c0392b; }
+.error { font-style: normal; font-size: 13px; color: #c0392b; }

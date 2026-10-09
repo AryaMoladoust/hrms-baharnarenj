@@ -1,0 +1,13 @@
+.page { min-height: 100vh; padding-bottom: 40px; }
+.card { width: min(480px, calc(100% - 28px)); margin: 28px auto 0; padding: 26px 18px 20px; text-align: center; border: 1px solid var(--line); border-radius: 34px 34px 22px 22px; border-top: 6px solid var(--roof); background: var(--surface); box-shadow: 0 14px 34px rgba(30, 42, 36, .12); }
+.badge { width: 72px; height: 72px; margin: 0 auto 8px; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: var(--on-primary); box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 16%, transparent); }
+.badge[data-pending='true'] { background: var(--amber); color: var(--night); box-shadow: 0 0 0 8px color-mix(in srgb, var(--amber) 28%, transparent); }
+.card h1 { margin: 10px 0 0; font-family: var(--font-display); font-size: 34px; line-height: 1.4; }
+.text { margin: 4px 0 16px; line-height: 2; color: var(--muted); }
+.code { margin-bottom: 16px; padding: 12px; display: grid; gap: 2px; border-radius: 18px; background: var(--night); color: #f7f1dc; }
+.code span { font-size: 12.5px; color: #d9d3bd; }
+.code strong { font-size: 26px; letter-spacing: .06em; color: var(--amber); }
+.buttons { display: grid; gap: 8px; }
+.primary, .ghost { min-height: 52px; display: grid; place-items: center; border-radius: 16px; font-weight: 800; }
+.primary { background: var(--primary); color: var(--on-primary); }
+.ghost { border: 1.5px solid var(--line); color: var(--ink); }

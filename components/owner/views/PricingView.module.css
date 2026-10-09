@@ -1,0 +1,18 @@
+.state { margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 1.5; color: var(--amber); }
+.note { margin: 6px 0 0; font-size: 13px; line-height: 1.9; color: var(--muted); }
+:global(.night) .note { color: #d9d3bd; }
+.quick { margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.quickBtn, .quickOn { min-width: 58px; min-height: 44px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--ink); font-weight: 800; }
+.quickOn { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+.buttons { margin-top: 12px; display: grid; gap: 8px; }
+.prices, .history { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.prices li { min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--line); }
+.prices li:last-child { border-bottom: 0; }
+.prices li > span:first-child { display: inline-flex; align-items: center; gap: 8px; }
+.nums { display: grid; text-align: end; }
+.nums s { font-size: 12px; opacity: .55; }
+.nums b { color: var(--primary); }
+.nums b[data-up='true'] { color: #b3402a; }
+.history li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-size: 14px; border-bottom: 1px dashed var(--line); }
+.history li:last-child { border-bottom: 0; }
+.history small { color: var(--muted); }

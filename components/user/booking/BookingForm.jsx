@@ -45,6 +45,7 @@ export default function BookingForm({ slug }) {
   const [status, setStatus] = useState('idle');
   const [termsOpen, setTermsOpen] = useState(false);
   const [coverMissing, setCoverMissing] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (!range.ready) return;
@@ -80,6 +81,7 @@ export default function BookingForm({ slug }) {
   // Step 2: the guest accepted the terms in the popup -> create the reservation and go to the payment gateway.
   const confirmAndPay = async () => {
     setTermsOpen(false);
+    setSubmitError('');
     setStatus('sending');
     const result = await submitReservation({
       slug, guests, addons: selected,
@@ -89,8 +91,14 @@ export default function BookingForm({ slug }) {
       nationalId: normalizeDigits(form.nationalId),
       termsAccepted: true,
     });
-    if (result.paymentUrl) window.location.href = result.paymentUrl;
-    else setStatus('idle');
+    if (!result.ok) {
+      setStatus('idle');
+      setSubmitError(t(result.error === 'room_booked' ? 'errBooked' : result.error === 'validation' ? 'errCheckForm' : 'errBookingServer'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    // With a payment gateway connected the server returns paymentUrl; until then the booking page shows the booking code.
+    window.location.href = result.paymentUrl || `/booking/done?code=${encodeURIComponent(result.code)}${result.paid ? '' : '&pending=1'}`;
   };
 
   const booked = info?.status === 'booked';
@@ -140,6 +148,7 @@ export default function BookingForm({ slug }) {
       <form className={styles.layout} onSubmit={onSubmit} noValidate>
         <div className={styles.main}>
           {booked && <p className={styles.alert} role="alert">{t('roomBooked')}. {t('roomBookedHint')}</p>}
+          {submitError && <p className={styles.alert} role="alert">{submitError}</p>}
 
           <section className={styles.card}>
             <h2><span className={styles.cardIcon}>{ICONS.user}</span>{t('yourDetails')}</h2>
