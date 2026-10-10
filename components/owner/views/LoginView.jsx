@@ -27,6 +27,7 @@ export default function LoginView() {
       if (e instanceof ApiError && e.code === 'locked') setError(t('ownErrLocked'));
       else if (e instanceof ApiError && e.code === 'too_many') setError(t('ownErrTooMany'));
       else if (e instanceof ApiError && e.code === 'invalid') setError(t('ownErrInvalid'));
+      else if (e instanceof ApiError && e.code === 'db_unavailable') setError(t('ownErrDb'));
       else setError(t('ownErrServer'));
       setBusy(false);
     }
