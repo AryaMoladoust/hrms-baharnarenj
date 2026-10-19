@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import OwnerShell, { useOwner } from '@/components/owner/OwnerShell';
+import { useOwner } from '@/components/owner/OwnerShell';
 import { Button, Card, ErrorNote, Field, icon } from '@/components/owner/ui/Kit';
 import { errorText } from '@/components/owner/format';
 import { usePreferences } from '@/components/providers/Preferences';
@@ -74,7 +74,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function AccountView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownAccount')}><Body /></OwnerShell>;
+  return <Body />;
 }

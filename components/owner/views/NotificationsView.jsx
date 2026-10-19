@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import OwnerShell, { useOwner } from '@/components/owner/OwnerShell';
+import { useOwner } from '@/components/owner/OwnerShell';
 import { Button, Card, Empty, ErrorNote, Loading } from '@/components/owner/ui/Kit';
 import { useOwnerData } from '@/components/owner/useOwnerData';
 import { notificationText } from '@/components/owner/notificationText';
@@ -110,7 +110,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function NotificationsView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownNotifications')}><Body /></OwnerShell>;
+  return <Body />;
 }

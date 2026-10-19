@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Header from '@/components/user/header/Header';
 import RoomTile from '@/components/user/room-card/RoomTile';
 import AboutSection from '@/components/user/about/AboutSection';
+import FaqSection from '@/components/user/faq/FaqSection';
 import { usePreferences } from '@/components/providers/Preferences';
 import { rooms } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
@@ -42,12 +43,12 @@ export default function HomePage() {
         <Header />
         <div className={styles.heroInner}>
           <div className={styles.copy}>
-            <h1>{t('heroTitle')}</h1>
+            <h1><small>{t('heroEyebrow')}</small>{t('heroTitle')}</h1>
             <p>{t('heroText')}</p>
             <p className={styles.long}>{t('heroTextLong')}</p>
           </div>
           <div className={styles.arch}>
-            <Image src="/images/home/hero.png" alt="" fill priority sizes="(max-width: 900px) 140px, 400px" />
+            <Image src="/images/home/hero.png" alt={t('altHero')} fill priority sizes="(max-width: 900px) 140px, 400px" />
           </div>
         </div>
         <div className={styles.eave} aria-hidden="true" />
@@ -72,6 +73,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      <FaqSection />
       <AboutSection />
     </main>
   );

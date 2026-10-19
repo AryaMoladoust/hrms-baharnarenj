@@ -22,12 +22,13 @@
 
 .chips { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 8px; }
 .tag { padding: 3px 13px; border-radius: 999px; background: var(--amber); color: var(--night); font-size: 12.5px; font-weight: 800; }
-.status, .statusBooked {
+.status, .statusBooked, .statusPartial {
   display: inline-flex; align-items: center; gap: 7px; padding: 3px 13px;
   border: 1px solid rgba(247, 241, 220, .22); border-radius: 999px; background: rgba(247, 241, 220, .1);
   font-size: 13px; font-weight: 800;
 }
-.status i, .statusBooked i { width: 9px; height: 9px; border-radius: 50%; background: #3ecf8e; box-shadow: 0 0 0 3px rgba(62, 207, 142, .25); }
+.status i, .statusBooked i, .statusPartial i { width: 9px; height: 9px; border-radius: 50%; background: #3ecf8e; box-shadow: 0 0 0 3px rgba(62, 207, 142, .25); }
+.statusPartial i { background: #f0a63a; box-shadow: 0 0 0 3px rgba(240, 166, 58, .28); }
 .statusBooked i { background: #ef6a5a; box-shadow: 0 0 0 3px rgba(239, 106, 90, .25); }
 
 .eave {

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import OwnerShell from '@/components/owner/OwnerShell';
 import ExpenseSheet, { CATEGORY_KEYS } from '@/components/owner/ExpenseSheet';
 import DateButton from '@/components/owner/ui/DateButton';
 import { Button, Card, Chip, Empty, ErrorNote, icon, Loading, RoomDot, Segmented } from '@/components/owner/ui/Kit';
@@ -175,7 +174,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function FinanceView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownNavFinance')}><Body /></OwnerShell>;
+  return <Body />;
 }

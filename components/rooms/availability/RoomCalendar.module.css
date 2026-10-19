@@ -1,0 +1,43 @@
+.notice { margin-bottom: 14px; padding: 12px 14px; display: grid; gap: 10px; border: 1px solid color-mix(in srgb, var(--amber) 55%, var(--line)); border-radius: 18px; background: color-mix(in srgb, var(--amber) 14%, var(--surface)); font-size: 14px; }
+.notice strong { color: #7a4e00; }
+.runs { display: flex; flex-wrap: wrap; gap: 8px; }
+.runs button { min-height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--primary); color: var(--on-primary); font-weight: 800; font-size: 13.5px; }
+.runs button:active { transform: scale(.97); }
+
+.loading { margin: 0; padding: 24px 0; text-align: center; color: var(--muted); }
+.hint { margin: 0 0 8px; text-align: center; font-size: 14px; font-weight: 700; color: var(--accent); }
+
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.nav h3 { margin: 0; font-family: var(--font-display); font-size: 24px; line-height: 1.4; }
+.nav button { width: 44px; height: 44px; display: grid; place-items: center; border: 1.5px solid var(--line); border-radius: 14px; background: transparent; color: var(--ink); }
+.nav button:disabled { opacity: .3; cursor: default; }
+.flip { transform: scaleX(-1); }
+/* "Previous" points toward the start of the line: right in RTL, left in LTR. */
+:global([dir='rtl']) .nav button svg { transform: scaleX(-1); }
+:global([dir='rtl']) .nav button svg.flip { transform: none; }
+
+.week, .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
+.week { margin: 10px 0 4px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.week span:last-child { color: var(--roof); }
+
+.day { position: relative; min-height: 46px; border: 0; border-radius: 12px; background: transparent; color: var(--ink); font-size: 16px; font-weight: 600; transition: background-color .15s ease, transform .12s ease; }
+.free { background: color-mix(in srgb, var(--primary) 9%, transparent); }
+.free:active { transform: scale(.94); }
+@media (hover: hover) and (pointer: fine) { .free:hover { background: color-mix(in srgb, var(--primary) 20%, transparent); } }
+.dim { opacity: .3; cursor: default; }
+
+/* Taken night: diagonal hatching, number faded. If it is the last day the guest may pick (check-out), it keeps a ring and stays tappable. */
+.taken { color: var(--muted); background: repeating-linear-gradient(135deg, transparent 0 4px, color-mix(in srgb, var(--roof) 26%, transparent) 4px 6px); cursor: default; }
+.taken:disabled { opacity: .85; }
+.leaveOk { cursor: pointer; box-shadow: inset 0 0 0 2px var(--primary); color: var(--primary); }
+
+.inside { background: color-mix(in srgb, var(--accent) 20%, transparent); border-radius: 4px; }
+.edge, .edge:disabled { background: var(--primary); color: var(--on-primary); font-weight: 800; opacity: 1; }
+.today::after { content: ''; position: absolute; inset: 4px; border: 2px solid var(--amber); border-radius: 10px; pointer-events: none; }
+
+.legend { margin: 14px 0 0; padding: 10px 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; list-style: none; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 7px; }
+.legend i { width: 16px; height: 16px; border-radius: 5px; }
+.keyFree { background: color-mix(in srgb, var(--primary) 16%, transparent); }
+.keyTaken { background: repeating-linear-gradient(135deg, transparent 0 3px, color-mix(in srgb, var(--roof) 45%, transparent) 3px 5px); box-shadow: inset 0 0 0 1px var(--line); }
+.keyYours { background: var(--primary); }

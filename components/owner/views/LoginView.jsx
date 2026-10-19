@@ -6,6 +6,12 @@ import { usePreferences } from '@/components/providers/Preferences';
 import { ApiError, ownerFetch } from '@/lib/owner/client';
 import styles from './LoginView.module.css';
 
+const EYE = <><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></>;
+const EYE_OFF = <><path d="M3 3l18 18" /><path d="M10.6 5.7A10.4 10.4 0 0112 5.5C18.4 5.5 22 12 22 12a17.6 17.6 0 01-3.1 3.9M6.6 6.7A17.2 17.2 0 002 12s3.6 6.5 10 6.5c1.7 0 3.2-.4 4.5-1" /><path d="M9.9 9.9a3 3 0 004.2 4.2" /></>;
+const eyeIcon = (paths) => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths}</svg>
+);
+
 export default function LoginView() {
   const { t, toggleLang } = usePreferences();
   const router = useRouter();
@@ -51,9 +57,9 @@ export default function LoginView() {
           </label>
           <label>
             <span>{t('ownPassword')}</span>
-            <div className={styles.passwordRow}>
+            <div className={styles.passwordRow} dir="ltr">
               <input type={show ? 'text' : 'password'} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} autoComplete="current-password" dir="ltr" />
-              <button type="button" onClick={() => setShow(!show)} aria-pressed={show}>{show ? t('ownHide') : t('ownShow')}</button>
+              <button type="button" onClick={() => setShow(!show)} aria-pressed={show} aria-label={show ? t('ownHide') : t('ownShow')} title={show ? t('ownHide') : t('ownShow')}>{eyeIcon(show ? EYE_OFF : EYE)}</button>
             </div>
           </label>
           {error && <p className={styles.error} role="alert">{error}</p>}

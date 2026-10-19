@@ -37,7 +37,7 @@ export default function RoomGallery({ room }) {
             {!missing[file] && (
               <Image
                 src={`${room.imageDir}/${file}`}
-                alt={`${lang === 'fa' ? room.name : room.nameEn} (${i + 1}/${room.images.length})`}
+                alt={`${t('altRoom', { name: lang === 'fa' ? room.name : room.nameEn })} (${i + 1}/${room.images.length})`}
                 fill
                 sizes="(min-width: 900px) 700px, 100vw"
                 priority={i === 0}

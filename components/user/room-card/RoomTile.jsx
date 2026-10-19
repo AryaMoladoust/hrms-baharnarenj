@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import NightDots from '@/components/user/availability/NightDots';
 import { usePreferences } from '@/components/providers/Preferences';
 import { formatDay, formatNumber } from '@/lib/dates';
 import styles from './RoomTile.module.css';
@@ -16,6 +17,10 @@ export default function RoomTile({ room, info, checkIn, checkOut }) {
   const { t, lang } = usePreferences();
   const [coverMissing, setCoverMissing] = useState(false);
   const booked = info?.status === 'booked';
+  const partial = info?.status === 'partial'; // some nights of the chosen dates are free, some are taken
+  const n = (value) => formatNumber(value, lang);
+  const stayHref = (run) => `/rooms/${room.slug}?checkIn=${run.from}&checkOut=${run.to}`;
+  const bestRun = partial ? info.freeRuns?.[0] : null; // longest free stretch, ready to book
   const discount = !booked && info?.discountPercent > 0 ? info.discountPercent : 0;
   const basePrice = info?.price;
   // discount > 0 = owner's discount (badge + struck-through old price); a negative percent is a price increase (no badge).
@@ -28,7 +33,7 @@ export default function RoomTile({ room, info, checkIn, checkOut }) {
     <article className={`${styles.tile} ${booked ? styles.booked : ''}`} data-room={room.slug}>
       <div className={styles.photo}>
         {cover && !coverMissing ? (
-          <Image src={cover} alt="" fill sizes="(min-width: 900px) 300px, 45vw" className={styles.img} onError={() => setCoverMissing(true)} />
+          <Image src={cover} alt={t('altRoom', { name })} fill sizes="(min-width: 900px) 300px, 45vw" className={styles.img} onError={() => setCoverMissing(true)} />
         ) : (
           <svg className={styles.placeholder} viewBox="0 0 40 52" aria-hidden="true">
             <path d="M4 50V20C4 9 11 3 20 3s16 6 16 17v30z" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -44,10 +49,14 @@ export default function RoomTile({ room, info, checkIn, checkOut }) {
           {tag && <span className={styles.tag}>{tag}</span>}
         </h3>
 
-        <p className={booked ? styles.statusBooked : styles.status}>
+        <p className={booked ? styles.statusBooked : partial ? styles.statusPartial : styles.status}>
           <i aria-hidden="true" />
-          {booked ? t('bookedUntil', { date: formatDay(info.bookedUntil, lang) }) : t('free')}
+          {booked ? t('fullyBooked') : partial ? t('freeNightsOf', { free: n(info.freeNights), total: n(info.totalNights) }) : t('free')}
         </p>
+
+        {partial && <NightDots nights={info.nights} label={t('freeNightsOf', { free: n(info.freeNights), total: n(info.totalNights) })} />}
+        {bestRun && <Link className={styles.sub} href={stayHref(bestRun)}>{t('freeRunLink', { from: formatDay(bestRun.from, lang), to: formatDay(bestRun.to, lang) })}</Link>}
+        {booked && info.nextFree && <Link className={styles.sub} href={stayHref(info.nextFree)}>{t('nextFreeNight', { date: formatDay(info.nextFree.from, lang) })}</Link>}
 
         {!booked && finalPrice && (
           <p className={styles.price}>

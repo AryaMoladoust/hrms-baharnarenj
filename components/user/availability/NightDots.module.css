@@ -1,0 +1,5 @@
+/* Colors come from custom properties so a dark card (the suite) can restyle them. */
+.dots { display: inline-flex; align-items: center; gap: 5px; padding-block: 2px; }
+.dots i { width: 12px; height: 12px; flex: none; border-radius: 50%; }
+.free { background: var(--dot-free, #2f9e62); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot-free, #2f9e62) 24%, transparent); }
+.busy { border: 2px solid var(--dot-busy, #c0392b); background: transparent; opacity: .7; }

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/user/header/Header';
 import RoomGallery from '@/components/rooms/gallery/RoomGallery';
+import RoomCalendar from '@/components/rooms/availability/RoomCalendar';
 import DateRangeFields from '@/components/user/booking/DateRangeFields';
 import { useDateRange } from '@/components/user/booking/useDateRange';
 import { usePreferences } from '@/components/providers/Preferences';
@@ -12,7 +13,7 @@ import { getRoomBySlug } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
 import { ADDONS, discounted } from '@/lib/pricing';
 import { POLICIES } from '@/lib/policies';
-import { formatDay, formatNumber } from '@/lib/dates';
+import { formatNumber } from '@/lib/dates';
 import styles from './RoomDetail.module.css';
 
 const icon = (paths) => (
@@ -47,11 +48,13 @@ export default function RoomDetail({ slug }) {
   }, [range.ready, range.checkIn, range.checkOut, slug]);
 
   const booked = info?.status === 'booked';
+  const partial = info?.status === 'partial';
+  const unavailable = booked || partial; // the chosen dates cannot be booked as they are
+  const n = (value) => formatNumber(value, lang);
   const price = (value) => formatNumber(discounted(value, info.discountPercent), lang);
   const bookHref = `/booking?room=${slug}&checkIn=${range.checkIn}&checkOut=${range.checkOut}`;
 
   const features = lang === 'fa' ? room.features : room.featuresEn;
-  const n = (value) => formatNumber(value, lang);
 
   return (
     <main className={styles.page}>
@@ -65,9 +68,9 @@ export default function RoomDetail({ slug }) {
             </h1>
             <div className={styles.chips}>
               {(lang === 'fa' ? room.tag : room.tagEn) && <span className={styles.tag}>{lang === 'fa' ? room.tag : room.tagEn}</span>}
-              <span className={booked ? styles.statusBooked : styles.status}>
+              <span className={booked ? styles.statusBooked : partial ? styles.statusPartial : styles.status}>
                 <i aria-hidden="true" />
-                {booked ? t('bookedUntil', { date: formatDay(info.bookedUntil, lang) }) : t('free')}
+                {booked ? t('fullyBooked') : partial ? t('freeNightsOf', { free: n(info.freeNights), total: n(info.totalNights) }) : t('free')}
               </span>
             </div>
           </div>
@@ -83,6 +86,8 @@ export default function RoomDetail({ slug }) {
             <DateRangeFields range={range} />
           </div>
         </section>
+
+        <RoomCalendar slug={slug} range={range} info={info} shellClass={styles.card} iconClass={styles.cardIcon} icon={ICONS.calendar} />
 
         {info && (
           <section className={styles.priceCard}>
@@ -129,8 +134,8 @@ export default function RoomDetail({ slug }) {
       </div>
 
       <div className={styles.bar}>
-        {booked ? (
-          <p className={styles.barNote}><strong>{t('roomBooked')}</strong><span>{t('roomBookedHint')}</span></p>
+        {unavailable ? (
+          <p className={styles.barNote}><strong>{t(partial ? 'roomPartial' : 'roomBooked')}</strong><span>{t(partial ? 'roomPartialHint' : 'roomBookedHint')}</span></p>
         ) : (
           <>
             <p className={styles.barPrice}>

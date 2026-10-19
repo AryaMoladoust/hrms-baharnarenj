@@ -101,7 +101,8 @@ export default function BookingForm({ slug }) {
     window.location.href = result.paymentUrl || `/booking/done?code=${encodeURIComponent(result.code)}${result.paid ? '' : '&pending=1'}`;
   };
 
-  const booked = info?.status === 'booked';
+  const booked = Boolean(info) && info.status !== 'free'; // fully or partly taken: these exact dates cannot be booked
+  const partial = info?.status === 'partial';
 
   const lineLabel = (line) => {
     if (line.type === 'room') return t('roomLine', { n: num(line.nights) });
@@ -147,7 +148,7 @@ export default function BookingForm({ slug }) {
 
       <form className={styles.layout} onSubmit={onSubmit} noValidate>
         <div className={styles.main}>
-          {booked && <p className={styles.alert} role="alert">{t('roomBooked')}. {t('roomBookedHint')}</p>}
+          {booked && <p className={styles.alert} role="alert">{t(partial ? 'roomPartial' : 'roomBooked')}. {t(partial ? 'roomPartialHint' : 'roomBookedHint')}</p>}
           {submitError && <p className={styles.alert} role="alert">{submitError}</p>}
 
           <section className={styles.card}>

@@ -41,9 +41,9 @@ export default function AboutSection() {
         <Reveal as="h2" className={styles.title}>{t('aboutTitle')}</Reveal>
 
         <div className={styles.mosaic}>
-          <Reveal variant="zoom" className={`${styles.photo} ${styles.big}`}><img src="/images/about/room-arch.jpg" alt="" loading="lazy" /></Reveal>
-          <Reveal variant="zoom" delay={150} className={`${styles.photo} ${styles.small}`}><img src="/images/about/room-niche.jpg" alt="" loading="lazy" /></Reveal>
-          <Reveal variant="zoom" delay={300} className={`${styles.photo} ${styles.small}`}><img src="/images/about/door-glass.jpg" alt="" loading="lazy" /></Reveal>
+          <Reveal variant="zoom" className={`${styles.photo} ${styles.big}`}><img src="/images/about/room-arch.jpg" alt={t('altAbout1')} loading="lazy" /></Reveal>
+          <Reveal variant="zoom" delay={150} className={`${styles.photo} ${styles.small}`}><img src="/images/about/room-niche.jpg" alt={t('altAbout2')} loading="lazy" /></Reveal>
+          <Reveal variant="zoom" delay={300} className={`${styles.photo} ${styles.small}`}><img src="/images/about/door-glass.jpg" alt={t('altAbout3')} loading="lazy" /></Reveal>
         </div>
 
         <Reveal as="p" className={styles.slogan}>{t('slogan')}</Reveal>
@@ -56,7 +56,7 @@ export default function AboutSection() {
         </div>
 
         <div className={styles.parking}>
-          <Reveal variant="zoom" className={styles.doorPhoto}><img src="/images/about/door.jpg" alt="" loading="lazy" /></Reveal>
+          <Reveal variant="zoom" className={styles.doorPhoto}><img src="/images/about/door.jpg" alt={t('altAbout4')} loading="lazy" /></Reveal>
           <div className={styles.parkingRules}>
             <Rule iconKey="parking" title={t('parkingTitle')} text={t('parkingNo')} />
             <Rule iconKey="pin" delay={120} text={t('parkingPublic')} />

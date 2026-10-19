@@ -28,8 +28,11 @@
 .form input { width: 100%; min-height: 54px; padding: 0 16px; border: 1.5px solid var(--line); border-radius: 16px; background: var(--bg); color: var(--ink); font-size: 16px; }
 .form input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 18%, transparent); }
 .passwordRow { position: relative; }
-.passwordRow input { padding-inline-end: 84px; }
-.passwordRow button { position: absolute; inset-block: 6px; inset-inline-end: 6px; padding: 0 14px; border: 0; border-radius: 12px; background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--muted); font-size: 13px; font-weight: 700; }
+.passwordRow input { padding-inline-end: 58px; }
+.passwordRow button { position: absolute; inset-block: 6px; inset-inline-end: 6px; width: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 12px; background: transparent; color: var(--muted); transition: background-color .15s ease, color .15s ease; }
+.passwordRow button:active { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.passwordRow button[aria-pressed='true'] { color: var(--primary); }
+@media (hover: hover) and (pointer: fine) { .passwordRow button:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); } }
 .error { margin: 0; padding: 10px 14px; border-radius: 14px; background: #f6d9d2; color: #7a2a1b; font-weight: 700; font-size: 14px; line-height: 1.8; }
 .submit { min-height: 56px; border: 0; border-radius: 16px; background: var(--primary); color: var(--on-primary); font-size: 17px; font-weight: 800; }
 .submit:disabled { opacity: .6; cursor: progress; }

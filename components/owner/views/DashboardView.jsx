@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import OwnerShell, { useOwner } from '@/components/owner/OwnerShell';
+import { useRouter } from 'next/navigation';
+import { useOwner } from '@/components/owner/OwnerShell';
 import ReservationRow from '@/components/owner/ReservationRow';
 import { Card, Chip, Empty, ErrorNote, icon, Loading, RoomDot } from '@/components/owner/ui/Kit';
 import { useOwnerData } from '@/components/owner/useOwnerData';
@@ -43,7 +44,8 @@ function Body() {
   const { t, lang } = usePreferences();
   const { owner } = useOwner();
   const { data, error, loading, reload } = useOwnerData('dashboard');
-  const open = (id) => { window.location.href = `/owner/reservations?open=${id}`; };
+  const router = useRouter();
+  const open = (id) => router.push(`/owner/reservations?open=${id}`); // client-side, so the page change animates like the bottom-bar links
 
   if (loading && !data) return <Loading />;
   if (error && !data) return <ErrorNote onRetry={reload} retryLabel={t('ownRetry')}>{t('ownErrServer')}</ErrorNote>;
@@ -109,7 +111,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function DashboardView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownNavDashboard')}><Body /></OwnerShell>;
+  return <Body />;
 }

@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import OwnerBottomNav from '@/components/owner/OwnerBottomNav';
 import { icon } from '@/components/owner/ui/Kit';
 import { notificationText } from '@/components/owner/notificationText';
@@ -14,13 +15,39 @@ export const useOwner = () => useContext(OwnerContext);
 
 const POLL_MS = 30000;
 
+// Page title per route. Longest prefix wins, so /owner/pricing/anything still finds its title.
+const TITLES = [
+  ['/owner/dashboard', 'ownNavDashboard'],
+  ['/owner/reservations', 'ownNavReservations'],
+  ['/owner/rooms', 'ownNavRooms'],
+  ['/owner/finance', 'ownNavFinance'],
+  ['/owner/pricing', 'ownPricing'],
+  ['/owner/notifications', 'ownNotifications'],
+  ['/owner/account', 'ownAccount'],
+  ['/owner/more', 'ownNavMore'],
+];
+const titleKey = (pathname) => (TITLES.find(([prefix]) => pathname.startsWith(prefix)) || TITLES[0])[1];
+
 /**
- * Frame of every owner page: fixed night-green top bar (title, bell with unread count, account), bottom navigation,
- * and a 30-second check for new notifications. A new paid reservation pops up as a message (and as a phone/browser
- * notification if the owner allowed it); closed-app notifications come from Web Push (see lib/push.js).
+ * Frame of every owner page. It lives in app/owner/layout.jsx, so it is NOT rebuilt when the owner moves between pages:
+ * the top bar and the bottom navigation stay mounted, which is what lets the amber bubble slide from one item to the next
+ * (same as the guest app). Only the page content below the bar is replaced, with a short fade-in (app/owner/template.jsx).
+ * The login page has no frame.
  */
-export default function OwnerShell({ title, children }) {
+export default function OwnerShell({ children }) {
+  const pathname = usePathname() || '';
+  if (pathname.startsWith('/owner/login')) return children;
+  return <Frame pathname={pathname}>{children}</Frame>;
+}
+
+/**
+ * Fixed night-green top bar (title, bell with unread count, account), bottom navigation, and a 30-second check for new
+ * notifications. A new paid reservation pops up as a message (and as a phone/browser notification if the owner allowed it);
+ * closed-app notifications come from Web Push (see lib/push.js).
+ */
+function Frame({ pathname, children }) {
   const { t, lang } = usePreferences();
+  const title = t(titleKey(pathname));
   const [owner, setOwner] = useState(null);
   const [unread, setUnread] = useState(0);
   const [message, setMessage] = useState(null);
@@ -69,7 +96,7 @@ export default function OwnerShell({ title, children }) {
           <div className={styles.inner}>
             <div className={styles.titleBlock}>
               <span>{t('ownPanel')}</span>
-              <h1>{title}</h1>
+              <h1 key={title} className={styles.titleIn}>{title}</h1>
             </div>
             <div className={styles.tools}>
               <Link href="/owner/notifications" className={styles.iconLink} aria-label={t('ownNotifications')}>

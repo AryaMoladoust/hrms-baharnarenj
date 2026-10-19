@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import OwnerShell, { useOwner } from '@/components/owner/OwnerShell';
+import { useOwner } from '@/components/owner/OwnerShell';
 import { Button, Card, Chip, ErrorNote, Field, icon, Loading, RoomDot, Segmented } from '@/components/owner/ui/Kit';
 import { useOwnerData } from '@/components/owner/useOwnerData';
 import { day, errorText, money, roomName } from '@/components/owner/format';
@@ -105,7 +105,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function PricingView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownPricing')}><Body /></OwnerShell>;
+  return <Body />;
 }

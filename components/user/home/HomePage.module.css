@@ -27,6 +27,7 @@
   line-height: 1.45;
 }
 .copy p { margin: 6px 0 0; font-size: 15px; line-height: 1.9; color: #d9d3bd; }
+.copy h1 small { display: block; margin-bottom: 2px; font-family: var(--font-body), sans-serif; font-size: 13px; font-weight: 800; line-height: 1.7; color: var(--amber); }
 .long { display: none; }
 
 .arch {
