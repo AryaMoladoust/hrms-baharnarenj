@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { usePreferences } from '@/components/providers/Preferences';
 import { getRoomCalendar } from '@/lib/rooms/availability';
 import { monthCells, monthTitle, partsOf, shiftMonth, systemFor, WEEKDAYS } from '@/lib/calendar';
@@ -14,6 +15,19 @@ const Chevron = ({ flip }) => (
     <path d="M15 5l-7 7 7 7" />
   </svg>
 );
+
+// Same size as the real month grid (title row, week row, five weeks), so the card does not change height when the days arrive.
+function CalendarSkeleton({ label }) {
+  return (
+    <SkeletonGroup label={label} className={styles.skeleton}>
+      <div className={styles.skeletonNav}><Skeleton w={44} h={44} r={14} /><Skeleton w={150} h={24} r={12} /><Skeleton w={44} h={44} r={14} /></div>
+      <div className={styles.grid}>
+        {Array.from({ length: 7 }, (_, i) => <Skeleton key={`w${i}`} h={12} r={6} />)}
+        {Array.from({ length: 35 }, (_, i) => <Skeleton key={i} h={46} r={12} />)}
+      </div>
+    </SkeletonGroup>
+  );
+}
 
 /**
  * Availability calendar of ONE room, on its page. Free days are tinted, taken nights are hatched.
@@ -45,6 +59,9 @@ export default function RoomCalendar({ slug, range, info, shellClass, iconClass,
     if (range.ready && !view) { const p = partsOf(range.checkIn, system); setView({ y: p.y, m: p.m }); }
   }, [range.ready, range.checkIn, system, view]);
 
+  // If the dates are changed somewhere else (the date fields, a suggestion button), a half-finished pick no longer applies.
+  useEffect(() => { if (pending && range.checkIn !== pending) setPending(null); }, [pending, range.checkIn]);
+
   // After the check-in, the first taken night is the last day that can still be the check-out.
   const blockedAt = useMemo(() => {
     if (!pending || !busy) return null;
@@ -53,7 +70,15 @@ export default function RoomCalendar({ slug, range, info, shellClass, iconClass,
   }, [pending, busy]);
 
   const cells = useMemo(() => (view ? monthCells(system, view) : []), [system, view]);
-  if (failed || !range.ready || !view) return null;
+  if (failed) return null;
+  if (!range.ready || !view) {
+    return (
+      <section className={shellClass}>
+        <h2><span className={iconClass}>{icon}</span>{t('roomCalendarTitle')}</h2>
+        <CalendarSkeleton label={t('loadingLabel')} />
+      </section>
+    );
+  }
 
   const todayParts = partsOf(today, system);
   const lastParts = partsOf(maxIso, system);
@@ -102,7 +127,7 @@ export default function RoomCalendar({ slug, range, info, shellClass, iconClass,
       )}
 
       {!busy ? (
-        <p className={styles.loading}>{t('searching')}</p>
+        <CalendarSkeleton label={t('loadingLabel')} />
       ) : (
         <>
           <p className={styles.hint} aria-live="polite">{pending ? t('calPickOut') : t('calPickIn')}</p>

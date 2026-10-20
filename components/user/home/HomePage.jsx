@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/user/header/Header';
 import RoomTile from '@/components/user/room-card/RoomTile';
@@ -18,24 +18,23 @@ export default function HomePage() {
   const { t, lang } = usePreferences();
   const range = useDateRange();
   const { checkIn, checkOut, ready } = range;
-  const [availability, setAvailability] = useState({});
-  const [loading, setLoading] = useState(false);
-  const searched = useRef(false);
+  const [result, setResult] = useState({ key: '', map: {} });
+  const [attempt, setAttempt] = useState(0); // the Search button asks again for the same dates
+  // An answer only counts for the dates it was asked for. After a date change the cards show skeletons until the new answer
+  // arrives, instead of keeping the old "free / booked" next to the new dates.
+  const key = `${checkIn}|${checkOut}`;
+  const fresh = ready && result.key === key;
+  const loading = ready && !fresh;
 
-  const search = useCallback(async (from, to) => {
-    setLoading(true);
-    const result = await getAvailability({ checkIn: from, checkOut: to });
-    setAvailability(Object.fromEntries(result.map((item) => [item.slug, item])));
-    setLoading(false);
-  }, []);
-
-  // First load: show availability for the default range (today -> tomorrow).
+  // Availability follows the dates (first load: today -> tomorrow). An older answer never overwrites a newer one.
   useEffect(() => {
-    if (ready && !searched.current) {
-      searched.current = true;
-      search(checkIn, checkOut);
-    }
-  }, [ready, checkIn, checkOut, search]);
+    if (!ready) return undefined;
+    let cancelled = false;
+    getAvailability({ checkIn, checkOut }).then((list) => {
+      if (!cancelled) setResult({ key: `${checkIn}|${checkOut}`, map: Object.fromEntries(list.map((item) => [item.slug, item])) });
+    });
+    return () => { cancelled = true; };
+  }, [ready, checkIn, checkOut, attempt]);
 
   return (
     <main className={styles.page}>
@@ -56,7 +55,7 @@ export default function HomePage() {
 
       <section className={styles.search} aria-label={t('search')}>
         <DateRangeFields range={range} />
-        <button type="button" className={styles.searchButton} disabled={!ready || loading} onClick={() => search(checkIn, checkOut)}>
+        <button type="button" className={styles.searchButton} disabled={!ready || loading} onClick={() => setAttempt((a) => a + 1)}>
           {loading ? t('searching') : t('search')}
         </button>
       </section>
@@ -68,7 +67,7 @@ export default function HomePage() {
         </div>
         <div className={styles.grid}>
           {rooms.map((room) => (
-            <RoomTile key={room.slug} room={room} info={availability[room.slug]} checkIn={checkIn} checkOut={checkOut} />
+            <RoomTile key={room.slug} room={room} info={fresh ? result.map[room.slug] : undefined} checkIn={checkIn} checkOut={checkOut} />
           ))}
         </div>
       </section>

@@ -47,7 +47,7 @@ function Body() {
   const router = useRouter();
   const open = (id) => router.push(`/owner/reservations?open=${id}`); // client-side, so the page change animates like the bottom-bar links
 
-  if (loading && !data) return <Loading />;
+  if (loading && !data) return <Loading variant="dashboard" />;
   if (error && !data) return <ErrorNote onRetry={reload} retryLabel={t('ownRetry')}>{t('ownErrServer')}</ErrorNote>;
 
   const percent = Math.round((data.occupied / data.totalRooms) * 100);

@@ -127,3 +127,7 @@
   .content { grid-template-columns: 1fr 1fr; align-items: start; margin-top: 40px; }
   .bar { padding-inline: max(16px, calc((100vw - 1120px) / 2 + 24px)); }
 }
+
+/* Placeholders inside the dark price card while the price loads. */
+.skeletonBody { display: grid; gap: 12px; }
+.skeletonHead { display: flex; align-items: center; gap: 10px; }
