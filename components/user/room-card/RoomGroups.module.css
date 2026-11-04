@@ -1,0 +1,28 @@
+.groups { width: 100%; max-width: 720px; margin-inline: auto; }
+
+.head { margin: 0 0 12px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 12px; }
+.title { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.5; color: var(--primary); }
+.text { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* A dashed amber rule with a label in the middle: "the suite is a separate unit". */
+.divider { margin: 30px 0 20px; display: flex; align-items: center; gap: 12px; }
+.divider::before, .divider::after { content: ''; flex: 1 1 16px; min-width: 16px; border-top: 2px dashed var(--amber); }
+.divider span {
+  flex: 0 1 auto;
+  max-width: 82%;
+  padding: 6px 18px;
+  border: 1.5px solid var(--amber);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--amber) 22%, var(--surface));
+  color: #6a4a00;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.7;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .grid { gap: 16px; }
+}

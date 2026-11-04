@@ -23,3 +23,10 @@
 - Check-in defaults to today and check-out defaults to tomorrow.
 - Kept styles component-scoped with CSS Modules.
 - Search button is visual only at this stage; availability logic will be connected later.
+
+## 2026-11-04 — Home page: suite grouping, clickable photos, eNamad seal
+- Room cards are now rendered by `components/user/room-card/RoomGroups.jsx` (used by the home page and `/rooms`): the four seasonal rooms form one labelled group, and the suite sits below a dashed divider that says it is a separate unit.
+- Fixed: tapping a room's photo did nothing. The photo (`.img`, `z-index: 1`) sat above the stretched link of the card name. The link overlay is now `z-index: 2` and the "free nights" links inside the card `z-index: 3` (`RoomTile.module.css`).
+- Added `components/user/footer/Footer.jsx` (brand line + eNamad trust seal). The seal addresses live in `lib/site.js` (`SITE.enamad`). The footer is rendered at the bottom of the home page by `AboutSection`.
+- New i18n keys (fa + en): `roomsSeasonalTitle`, `roomsSeasonalText`, `roomsSuiteDivider`, `enamadAlt`.
+

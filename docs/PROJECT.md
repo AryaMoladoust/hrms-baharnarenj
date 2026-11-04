@@ -48,8 +48,8 @@ The design should support:
 ## Localization and theme
 - Persian + English
 - RTL Persian / LTR English
-- Light + dark theme
-- Lantern icon is the visual metaphor for theme switching
+- One light palette (no dark theme, no theme toggle, no lantern switch)
+- The calendar is always Jalali, also when the interface is English
 
 ## Product quality goals
 Mobile-first, especially owner screens. The visual language should be modern and premium with subtle Iranian/Gilani inspiration, not cluttered or old-fashioned.

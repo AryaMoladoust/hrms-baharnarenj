@@ -13,11 +13,11 @@ Suggested palette direction:
 ## Customer home
 The home page is a single coherent landing/booking experience with:
 - hamburger menu
-- lantern theme toggle
 - real guesthouse hero image
 - date search/booking area
 - room cards
 - about/features/contact information
+- footer with the eNamad trust seal
 
 Owner login belongs inside the hamburger menu, not as the dominant public header action.
 
@@ -35,6 +35,8 @@ Preferred layout:
 ```
 
 Cards should be able to show image, availability, price, old/new price, and discount without becoming visually crowded.
+
+The suite is a separate unit, not a fifth seasonal room. The home page and `/rooms` show the four seasonal rooms under their own heading, then a dashed divider labelled as the suite being separate, then the suite card (`RoomGroups`). The whole card, photo included, opens the room page.
 
 ## Owner panel
 Mobile-first. Most daily usage is expected to happen on a phone. Keep actions obvious, cards touch-friendly, and reports readable on small screens.

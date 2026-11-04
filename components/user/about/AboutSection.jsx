@@ -3,6 +3,7 @@
 import Reveal from '@/components/ui/Reveal';
 import { usePreferences } from '@/components/providers/Preferences';
 import SupportCard from '@/components/user/support/SupportCard';
+import Footer from '@/components/user/footer/Footer';
 import { POLICIES } from '@/lib/policies';
 import { formatNumber } from '@/lib/dates';
 import styles from './AboutSection.module.css';
@@ -66,10 +67,7 @@ export default function AboutSection() {
         <Reveal as="p" className={styles.thanks}>{t('thanks')}</Reveal>
         <Reveal className={styles.support}><SupportCard variant="night" /></Reveal>
 
-        <Reveal as="footer" className={styles.footer}>
-          <strong>{t('brand')}</strong>
-          <span>{t('footerTag')}</span>
-        </Reveal>
+        <Footer />
       </section>
     </div>
   );

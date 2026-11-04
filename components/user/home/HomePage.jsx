@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/user/header/Header';
-import RoomTile from '@/components/user/room-card/RoomTile';
+import RoomGroups from '@/components/user/room-card/RoomGroups';
 import AboutSection from '@/components/user/about/AboutSection';
 import FaqSection from '@/components/user/faq/FaqSection';
 import { usePreferences } from '@/components/providers/Preferences';
-import { rooms } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
 import DateRangeFields from '@/components/user/booking/DateRangeFields';
 import { useDateRange } from '@/components/user/booking/useDateRange';
@@ -65,11 +64,7 @@ export default function HomePage() {
           <h2>{t('roomsTitle')}</h2>
           {ready && <p>{t('roomsRange', { from: formatDay(checkIn, lang), to: formatDay(checkOut, lang) })}</p>}
         </div>
-        <div className={styles.grid}>
-          {rooms.map((room) => (
-            <RoomTile key={room.slug} room={room} info={fresh ? result.map[room.slug] : undefined} checkIn={checkIn} checkOut={checkOut} />
-          ))}
-        </div>
+        <RoomGroups infoMap={fresh ? result.map : undefined} checkIn={checkIn} checkOut={checkOut} />
       </section>
 
       <FaqSection />

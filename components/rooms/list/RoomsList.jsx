@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Header from '@/components/user/header/Header';
-import RoomTile from '@/components/user/room-card/RoomTile';
+import RoomGroups from '@/components/user/room-card/RoomGroups';
 import DateRangeFields from '@/components/user/booking/DateRangeFields';
 import { useDateRange } from '@/components/user/booking/useDateRange';
 import { usePreferences } from '@/components/providers/Preferences';
-import { rooms } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
 import styles from './RoomsList.module.css';
 
@@ -35,11 +34,7 @@ export default function RoomsList() {
       <div className={styles.inner}>
         <h1>{t('roomsPageTitle')}</h1>
         <div className={styles.dates}><DateRangeFields range={range} /></div>
-        <div className={styles.grid}>
-          {rooms.map((room) => (
-            <RoomTile key={room.slug} room={room} info={fresh ? result.map[room.slug] : undefined} checkIn={range.checkIn} checkOut={range.checkOut} />
-          ))}
-        </div>
+        <RoomGroups infoMap={fresh ? result.map : undefined} checkIn={range.checkIn} checkOut={range.checkOut} />
       </div>
     </main>
   );

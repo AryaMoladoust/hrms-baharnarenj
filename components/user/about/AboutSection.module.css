@@ -70,9 +70,6 @@
 }
 .support { margin-top: 18px; }
 
-.footer { margin-top: 30px; display: grid; justify-items: center; text-align: center; }
-.footer strong { font-family: var(--font-display); font-size: 34px; color: var(--amber); line-height: 1.4; }
-.footer span { color: #cfc9b3; font-size: 14px; }
 
 /* The three photos are portrait (arch ~1:2.2, the other two ~3:4). On wider screens the mosaic is kept narrow and tall so each box
    has about the photo's own proportions: almost nothing is cropped, so nothing looks zoomed in. */

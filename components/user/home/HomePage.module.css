@@ -89,8 +89,6 @@
 .roomsHead h2 { margin: 0; font-family: var(--font-display); font-size: 34px; line-height: 1.4; }
 .roomsHead p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
 
-.grid { max-width: 720px; margin-inline: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
 
 @media (min-width: 900px) {
   .hero { padding: 120px 24px 80px; }
@@ -100,6 +98,5 @@
   .arch { width: 360px; border-radius: 999px 999px 24px 24px; }
   .search { grid-template-columns: 1fr 1fr auto; margin-top: 36px; }
   .searchButton { grid-column: auto; padding: 0 32px; }
-  .grid { gap: 16px; }
   .roomsHead { max-width: 720px; margin-inline: auto; }
 }
