@@ -29,4 +29,10 @@
 - Fixed: tapping a room's photo did nothing. The photo (`.img`, `z-index: 1`) sat above the stretched link of the card name. The link overlay is now `z-index: 2` and the "free nights" links inside the card `z-index: 3` (`RoomTile.module.css`).
 - Added `components/user/footer/Footer.jsx` (brand line + eNamad trust seal). The seal addresses live in `lib/site.js` (`SITE.enamad`). The footer is rendered at the bottom of the home page by `AboutSection`.
 - New i18n keys (fa + en): `roomsSeasonalTitle`, `roomsSeasonalText`, `roomsSuiteDivider`, `enamadAlt`.
+- The official eNamad seal image is used first. If enamad.ir does not serve it, our own copy (`public/images/enamad.png`) is shown inside the same link to the validation page (instead of a broken-image box).
+
+## 2026-11-10 — Home page hero: animated arch with depth
+- New `components/user/home/HeroScene.jsx` (+ `HeroScene.module.css`) replaces the old hero block of `HomePage`. It keeps the courtyard photo `public/images/home/hero.png` (no room photos in the hero) and adds motion.
+- 3D feel without a 3D library: depth layers (lantern glow behind, offset roof-coloured outline, the photo, petals in front) and a pointer tilt (`perspective` + `rotateX/Y`, only with a mouse and without reduced motion); idle float; a light glint crossing the glass every 9 s; falling bitter-orange petals; the headline rises in with a 70 ms stagger.
+- Animations use `transform` and `opacity` only; `prefers-reduced-motion` turns them all off. The photo is the only image of the hero (`priority`), so nothing new is downloaded.
 

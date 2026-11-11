@@ -1,61 +1,5 @@
 .page { min-height: 100vh; }
 
-/* Hero: kept short on phones so the date card is visible without scrolling. */
-.hero {
-  position: relative;
-  padding: 84px 16px 40px;
-  background:
-    radial-gradient(ellipse 70% 60% at 25% 70%, rgba(240, 166, 58, .22), transparent 70%),
-    var(--night);
-  color: #f7f1dc;
-}
-
-.heroInner {
-  width: min(1120px, 100%);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: center;
-}
-
-.copy h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(32px, 9vw, 60px);
-  font-weight: 700;
-  line-height: 1.45;
-}
-.copy p { margin: 6px 0 0; font-size: 15px; line-height: 1.9; color: #d9d3bd; }
-.copy h1 small { display: block; margin-bottom: 2px; font-family: var(--font-body), sans-serif; font-size: 13px; font-weight: 800; line-height: 1.7; color: var(--amber); }
-.long { display: none; }
-
-.arch {
-  position: relative;
-  width: min(42vw, 168px);
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: 999px 999px 18px 18px;
-  box-shadow: 0 0 0 3px var(--amber), 0 0 40px rgba(240, 166, 58, .35);
-  animation: glow 5s ease-in-out infinite alternate;
-}
-.arch img { object-fit: cover; }
-
-@keyframes glow {
-  from { box-shadow: 0 0 0 3px var(--amber), 0 0 28px rgba(240, 166, 58, .25); }
-  to { box-shadow: 0 0 0 3px var(--amber), 0 0 52px rgba(240, 166, 58, .5); }
-}
-
-/* Clay roof tiles hanging off the hero's edge: the page literally has an eave. */
-.eave {
-  position: absolute;
-  inset: auto 0 -13px;
-  height: 14px;
-  background:
-    linear-gradient(var(--roof), var(--roof)) 0 0 / 100% 4px no-repeat,
-    radial-gradient(circle at 50% 4px, var(--roof) 0 10px, transparent 11px) 0 0 / 22px 14px repeat-x;
-}
-
 .search {
   position: relative;
   z-index: 2;
@@ -91,11 +35,6 @@
 
 
 @media (min-width: 900px) {
-  .hero { padding: 120px 24px 80px; }
-  .heroInner { gap: 72px; }
-  .copy p { font-size: 17px; }
-  .long { display: block; }
-  .arch { width: 360px; border-radius: 999px 999px 24px 24px; }
   .search { grid-template-columns: 1fr 1fr auto; margin-top: 36px; }
   .searchButton { grid-column: auto; padding: 0 32px; }
   .roomsHead { max-width: 720px; margin-inline: auto; }

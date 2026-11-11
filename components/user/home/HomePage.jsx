@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Header from '@/components/user/header/Header';
+import HeroScene from '@/components/user/home/HeroScene';
 import RoomGroups from '@/components/user/room-card/RoomGroups';
 import AboutSection from '@/components/user/about/AboutSection';
 import FaqSection from '@/components/user/faq/FaqSection';
@@ -37,20 +36,7 @@ export default function HomePage() {
 
   return (
     <main className={styles.page}>
-      <section className={styles.hero}>
-        <Header />
-        <div className={styles.heroInner}>
-          <div className={styles.copy}>
-            <h1><small>{t('heroEyebrow')}</small>{t('heroTitle')}</h1>
-            <p>{t('heroText')}</p>
-            <p className={styles.long}>{t('heroTextLong')}</p>
-          </div>
-          <div className={styles.arch}>
-            <Image src="/images/home/hero.png" alt={t('altHero')} fill priority sizes="(max-width: 900px) 140px, 400px" />
-          </div>
-        </div>
-        <div className={styles.eave} aria-hidden="true" />
-      </section>
+      <HeroScene />
 
       <section className={styles.search} aria-label={t('search')}>
         <DateRangeFields range={range} />

@@ -13,7 +13,7 @@ Suggested palette direction:
 ## Customer home
 The home page is a single coherent landing/booking experience with:
 - hamburger menu
-- real guesthouse hero image
+- animated hero arch (`HeroScene`): the courtyard photo with depth layers, tilt, falling petals; motion rules are in the component's comments
 - date search/booking area
 - room cards
 - about/features/contact information

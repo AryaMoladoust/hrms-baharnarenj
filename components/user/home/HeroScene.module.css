@@ -1,0 +1,141 @@
+/* Hero: kept short on phones so the date card is visible without scrolling. */
+.hero {
+  position: relative;
+  padding: 84px 16px 40px;
+  overflow-x: clip; /* petals and the glow may leave the column, never the page */
+  background:
+    radial-gradient(ellipse 70% 60% at 25% 70%, rgba(240, 166, 58, .22), transparent 70%),
+    var(--pattern-star-light),
+    var(--night);
+  color: #f7f1dc;
+}
+
+.inner {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ---------- Headline: rises in line by line (stagger, 70ms) ---------- */
+.copy h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 9vw, 64px);
+  font-weight: 700;
+  line-height: 1.45;
+}
+.copy p { margin: 6px 0 0; font-size: 15px; line-height: 1.9; color: #d9d3bd; }
+.copy h1 small { display: block; margin-bottom: 2px; font-family: var(--font-body), sans-serif; font-size: 13px; font-weight: 800; line-height: 1.7; color: var(--amber); }
+.long { display: none; }
+
+.copy > * { animation: rise .6s var(--ease-out) backwards; animation-delay: calc(var(--n, 0) * 70ms + 60ms); }
+.copy > :nth-child(2) { --n: 1; }
+.copy > :nth-child(3) { --n: 2; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+/* ---------- The arch: stage > float > tilt (three layers so their transforms never fight) ---------- */
+.stage {
+  position: relative;
+  width: min(42vw, 168px);
+  animation: settle .8s var(--ease-out) backwards; /* transform only: the photo is visible from the first frame */
+}
+@keyframes settle { from { transform: scale(.94); } }
+
+.float { position: relative; animation: float 6s ease-in-out infinite alternate; }
+@keyframes float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+
+.tilt {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .45s var(--ease-out);
+}
+
+/* Depth layers: glow behind the arch, an offset roof-coloured outline, the window, the caption in front. */
+.halo {
+  position: absolute;
+  inset: -22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240, 166, 58, .5), transparent 64%);
+  transform: translateZ(-60px);
+  animation: pulse 5s ease-in-out infinite alternate;
+}
+@keyframes pulse { from { opacity: .55; } to { opacity: 1; } }
+
+.frameBack {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--roof);
+  border-radius: 999px 999px 18px 18px;
+  opacity: .85;
+  transform: translate3d(-14px, 14px, -36px);
+}
+
+.window {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 999px 999px 18px 18px;
+  background: var(--night);
+}
+.window img { object-fit: cover; object-position: 68% 50%; } /* keeps the glowing window and the steps in the arch */
+.ring { position: absolute; inset: 0; border: 3px solid var(--amber); border-radius: inherit; }
+
+/* A soft glint crosses the glass every few seconds (transform only). */
+.glint {
+  position: absolute;
+  inset: -10% auto -10% -60%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 244, 214, .22), transparent);
+  transform: translateX(0) skewX(-18deg);
+  animation: glint 9s var(--ease-out) 2.5s infinite;
+}
+@keyframes glint {
+  0% { transform: translateX(0) skewX(-18deg); }
+  30%, 100% { transform: translateX(520%) skewX(-18deg); }
+}
+
+/* ---------- Petals (in front of the arch: they sit on their own depth layer) ---------- */
+.petals { position: absolute; inset: -24px -10px; overflow: hidden; pointer-events: none; transform: translateZ(70px); }
+.petal {
+  position: absolute;
+  top: 0;
+  inset-inline-start: var(--x);
+  width: var(--s);
+  height: calc(var(--s) * 1.4);
+  border-radius: 80% 0 80% 0;
+  background: linear-gradient(135deg, #fffaf0, #f6e3b8 65%, #f0c97a);
+  opacity: 0;
+  animation: petal var(--t) linear var(--w) infinite;
+}
+@keyframes petal {
+  0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0deg); }
+  10% { opacity: .9; }
+  50% { transform: translate3d(calc(var(--d) * .4), 300px, 0) rotate(170deg); }
+  90% { opacity: .9; }
+  100% { opacity: 0; transform: translate3d(var(--d), 620px, 0) rotate(340deg); }
+}
+@media (max-width: 899px) { .petal:nth-child(n + 6) { display: none; } }
+
+/* Clay roof tiles hanging off the hero's edge: the page literally has an eave. */
+.eave {
+  position: absolute;
+  inset: auto 0 -13px;
+  height: 14px;
+  background:
+    linear-gradient(var(--roof), var(--roof)) 0 0 / 100% 4px no-repeat,
+    radial-gradient(circle at 50% 4px, var(--roof) 0 10px, transparent 11px) 0 0 / 22px 14px repeat-x;
+}
+
+@media (min-width: 900px) {
+  .hero { padding: 120px 24px 80px; }
+  .inner { gap: 72px; }
+  .copy p { font-size: 17px; }
+  .long { display: block; }
+  .stage { width: 360px; }
+  .window { border-radius: 999px 999px 24px 24px; }
+  .frameBack { border-radius: 999px 999px 24px 24px; transform: translate3d(-18px, 18px, -44px); }
+}
