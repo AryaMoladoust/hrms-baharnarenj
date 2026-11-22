@@ -1,0 +1,14 @@
+.footer { margin-top: 30px; display: grid; justify-items: center; text-align: center; }
+.footer strong { font-family: var(--font-display); font-size: 34px; color: var(--amber); line-height: 1.4; }
+.footer span { color: #cfc9b3; font-size: 14px; }
+
+/* The seal keeps its own size and look (125 x 136, dark background); only a thin ring and a soft shadow are added. */
+.seal {
+  margin-top: 18px;
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  line-height: 0;
+  box-shadow: 0 0 0 1px rgba(247, 241, 220, .22), 0 6px 18px rgba(0, 0, 0, .25);
+}
+.seal img { cursor: pointer; }

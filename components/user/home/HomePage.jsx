@@ -1,12 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import Header from '@/components/user/header/Header';
-import RoomTile from '@/components/user/room-card/RoomTile';
+import { useEffect, useState } from 'react';
+import HeroScene from '@/components/user/home/HeroScene';
+import RoomGroups from '@/components/user/room-card/RoomGroups';
 import AboutSection from '@/components/user/about/AboutSection';
+import FaqSection from '@/components/user/faq/FaqSection';
 import { usePreferences } from '@/components/providers/Preferences';
-import { rooms } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
 import DateRangeFields from '@/components/user/booking/DateRangeFields';
 import { useDateRange } from '@/components/user/booking/useDateRange';
@@ -17,45 +16,31 @@ export default function HomePage() {
   const { t, lang } = usePreferences();
   const range = useDateRange();
   const { checkIn, checkOut, ready } = range;
-  const [availability, setAvailability] = useState({});
-  const [loading, setLoading] = useState(false);
-  const searched = useRef(false);
+  const [result, setResult] = useState({ key: '', map: {} });
+  const [attempt, setAttempt] = useState(0); // the Search button asks again for the same dates
+  // An answer only counts for the dates it was asked for. After a date change the cards show skeletons until the new answer
+  // arrives, instead of keeping the old "free / booked" next to the new dates.
+  const key = `${checkIn}|${checkOut}`;
+  const fresh = ready && result.key === key;
+  const loading = ready && !fresh;
 
-  const search = useCallback(async (from, to) => {
-    setLoading(true);
-    const result = await getAvailability({ checkIn: from, checkOut: to });
-    setAvailability(Object.fromEntries(result.map((item) => [item.slug, item])));
-    setLoading(false);
-  }, []);
-
-  // First load: show availability for the default range (today -> tomorrow).
+  // Availability follows the dates (first load: today -> tomorrow). An older answer never overwrites a newer one.
   useEffect(() => {
-    if (ready && !searched.current) {
-      searched.current = true;
-      search(checkIn, checkOut);
-    }
-  }, [ready, checkIn, checkOut, search]);
+    if (!ready) return undefined;
+    let cancelled = false;
+    getAvailability({ checkIn, checkOut }).then((list) => {
+      if (!cancelled) setResult({ key: `${checkIn}|${checkOut}`, map: Object.fromEntries(list.map((item) => [item.slug, item])) });
+    });
+    return () => { cancelled = true; };
+  }, [ready, checkIn, checkOut, attempt]);
 
   return (
     <main className={styles.page}>
-      <section className={styles.hero}>
-        <Header />
-        <div className={styles.heroInner}>
-          <div className={styles.copy}>
-            <h1>{t('heroTitle')}</h1>
-            <p>{t('heroText')}</p>
-            <p className={styles.long}>{t('heroTextLong')}</p>
-          </div>
-          <div className={styles.arch}>
-            <Image src="/images/home/hero.png" alt="" fill priority sizes="(max-width: 900px) 140px, 400px" />
-          </div>
-        </div>
-        <div className={styles.eave} aria-hidden="true" />
-      </section>
+      <HeroScene />
 
       <section className={styles.search} aria-label={t('search')}>
         <DateRangeFields range={range} />
-        <button type="button" className={styles.searchButton} disabled={!ready || loading} onClick={() => search(checkIn, checkOut)}>
+        <button type="button" className={styles.searchButton} disabled={!ready || loading} onClick={() => setAttempt((a) => a + 1)}>
           {loading ? t('searching') : t('search')}
         </button>
       </section>
@@ -65,13 +50,10 @@ export default function HomePage() {
           <h2>{t('roomsTitle')}</h2>
           {ready && <p>{t('roomsRange', { from: formatDay(checkIn, lang), to: formatDay(checkOut, lang) })}</p>}
         </div>
-        <div className={styles.grid}>
-          {rooms.map((room) => (
-            <RoomTile key={room.slug} room={room} info={availability[room.slug]} checkIn={checkIn} checkOut={checkOut} />
-          ))}
-        </div>
+        <RoomGroups infoMap={fresh ? result.map : undefined} checkIn={checkIn} checkOut={checkOut} />
       </section>
 
+      <FaqSection />
       <AboutSection />
     </main>
   );

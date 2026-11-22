@@ -22,6 +22,7 @@
   --tone-paeez: #f3cb5a;
   --tone-zemestan: #f8faf6;
   --tone-suite: #24493b;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* strong ease-out for entrances */
   color-scheme: light;
 }
 

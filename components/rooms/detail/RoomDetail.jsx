@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/user/header/Header';
 import RoomGallery from '@/components/rooms/gallery/RoomGallery';
+import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
+import RoomCalendar from '@/components/rooms/availability/RoomCalendar';
 import DateRangeFields from '@/components/user/booking/DateRangeFields';
 import { useDateRange } from '@/components/user/booking/useDateRange';
 import { usePreferences } from '@/components/providers/Preferences';
@@ -12,7 +14,7 @@ import { getRoomBySlug } from '@/lib/rooms';
 import { getAvailability } from '@/lib/rooms/availability';
 import { ADDONS, discounted } from '@/lib/pricing';
 import { POLICIES } from '@/lib/policies';
-import { formatDay, formatNumber } from '@/lib/dates';
+import { formatNumber } from '@/lib/dates';
 import styles from './RoomDetail.module.css';
 
 const icon = (paths) => (
@@ -34,24 +36,29 @@ export default function RoomDetail({ slug }) {
   const params = useSearchParams();
   const initial = useMemo(() => ({ checkIn: params.get('checkIn'), checkOut: params.get('checkOut') }), [params]);
   const range = useDateRange(initial);
-  const [info, setInfo] = useState(null);
+  const [result, setResult] = useState({ key: '', info: null });
+  // The answer only counts for the dates it was asked for; after a date change the old one is dropped and skeletons show until the new one arrives.
+  const info = result.key === `${range.checkIn}|${range.checkOut}` ? result.info : null;
 
   // Availability follows the chosen dates.
   useEffect(() => {
     if (!range.ready) return;
     let cancelled = false;
+    const key = `${range.checkIn}|${range.checkOut}`;
     getAvailability({ checkIn: range.checkIn, checkOut: range.checkOut }).then((list) => {
-      if (!cancelled) setInfo(list.find((item) => item.slug === slug) || null);
+      if (!cancelled) setResult({ key, info: list.find((item) => item.slug === slug) || null });
     });
     return () => { cancelled = true; };
   }, [range.ready, range.checkIn, range.checkOut, slug]);
 
   const booked = info?.status === 'booked';
+  const partial = info?.status === 'partial';
+  const unavailable = booked || partial; // the chosen dates cannot be booked as they are
+  const n = (value) => formatNumber(value, lang);
   const price = (value) => formatNumber(discounted(value, info.discountPercent), lang);
   const bookHref = `/booking?room=${slug}&checkIn=${range.checkIn}&checkOut=${range.checkOut}`;
 
   const features = lang === 'fa' ? room.features : room.featuresEn;
-  const n = (value) => formatNumber(value, lang);
 
   return (
     <main className={styles.page}>
@@ -65,10 +72,12 @@ export default function RoomDetail({ slug }) {
             </h1>
             <div className={styles.chips}>
               {(lang === 'fa' ? room.tag : room.tagEn) && <span className={styles.tag}>{lang === 'fa' ? room.tag : room.tagEn}</span>}
-              <span className={booked ? styles.statusBooked : styles.status}>
-                <i aria-hidden="true" />
-                {booked ? t('bookedUntil', { date: formatDay(info.bookedUntil, lang) }) : t('free')}
-              </span>
+              {info ? (
+                <span className={booked ? styles.statusBooked : partial ? styles.statusPartial : styles.status}>
+                  <i aria-hidden="true" />
+                  {booked ? t('fullyBooked') : partial ? t('freeNightsOf', { free: n(info.freeNights), total: n(info.totalNights) }) : t('free')}
+                </span>
+              ) : <Skeleton w={112} h={28} r="pill" />}
             </div>
           </div>
           <RoomGallery room={room} />
@@ -84,7 +93,9 @@ export default function RoomDetail({ slug }) {
           </div>
         </section>
 
-        {info && (
+        <RoomCalendar slug={slug} range={range} info={info} shellClass={styles.card} iconClass={styles.cardIcon} icon={ICONS.calendar} />
+
+        {info ? (
           <section className={styles.priceCard}>
             <h2><span className={styles.cardIcon}>{ICONS.coin}</span>{t('pricePerNightTitle')}</h2>
             <p className={styles.nightPrice}>
@@ -102,6 +113,17 @@ export default function RoomDetail({ slug }) {
               ))}
             </ul>
             <p className={styles.rule}>{t('guestRule', { n: n(info.guests.included), price: n(info.guests.extraPrice) })}</p>
+          </section>
+        ) : (
+          <section className={styles.priceCard}>
+            <SkeletonGroup label={t('loadingLabel')} className={styles.skeletonBody}>
+              <div className={styles.skeletonHead}><Skeleton w={38} h={38} r="circle" /><Skeleton w={150} h={18} r={9} /></div>
+              <Skeleton w={190} h={34} r={12} />
+              <Skeleton w={130} h={16} r={8} />
+              <Skeleton h={54} r={16} />
+              <Skeleton h={54} r={16} />
+              <Skeleton h={54} r={16} />
+            </SkeletonGroup>
           </section>
         )}
 
@@ -129,17 +151,17 @@ export default function RoomDetail({ slug }) {
       </div>
 
       <div className={styles.bar}>
-        {booked ? (
-          <p className={styles.barNote}><strong>{t('roomBooked')}</strong><span>{t('roomBookedHint')}</span></p>
+        {unavailable ? (
+          <p className={styles.barNote}><strong>{t(partial ? 'roomPartial' : 'roomBooked')}</strong><span>{t(partial ? 'roomPartialHint' : 'roomBookedHint')}</span></p>
         ) : (
           <>
             <p className={styles.barPrice}>
-              {info && (
+              {info ? (
                 <>
                   <strong>{price(info.price)}</strong>
                   <span>{t('currency')} / {t('perNight')}</span>
                 </>
-              )}
+              ) : <Skeleton w={120} h={26} r={9} />}
             </p>
             <Link className={styles.book} href={bookHref}>{t('bookRoom')}</Link>
           </>

@@ -1,0 +1,5 @@
+.page { min-height: 100vh; padding: 90px 20px 40px; background: var(--night); color: #f7f1dc; }
+.page h1 { margin: 0 0 8px; font-family: var(--font-display); font-size: 34px; line-height: 1.5; }
+.page p { color: #d9d3bd; line-height: 2; }
+.page ul { margin: 12px 0; padding-inline-start: 22px; line-height: 2; }
+.page a { color: var(--amber); font-weight: 800; }

@@ -1,5 +1,7 @@
 'use client';
 
+import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
+import { usePreferences } from '@/components/providers/Preferences';
 import styles from './Kit.module.css';
 
 // Small building blocks shared by every owner page, so the whole panel looks like one product.
@@ -58,8 +60,27 @@ export function Empty({ children }) {
   return <p className={styles.empty}>{children}</p>;
 }
 
-export function Loading() {
-  return <div className={styles.loading} aria-busy="true"><i /><i /><i /></div>;
+// Placeholder rows shaped like the real rows (round badge, two lines, a small tag), the way a chat list looks in Telegram while it loads.
+// variant "dashboard": the dark greeting card, two buttons and a list of rooms.
+export function Loading({ variant = 'list' }) {
+  const { t } = usePreferences();
+  const row = (i) => (
+    <div className={styles.skeletonRow} key={i}>
+      <Skeleton w={44} h={44} r="circle" />
+      <div className={styles.skeletonLines}><Skeleton w="62%" h={15} r={8} /><Skeleton w="38%" h={12} r={6} /></div>
+      <Skeleton w={52} h={22} r="pill" />
+    </div>
+  );
+  if (variant === 'dashboard') {
+    return (
+      <SkeletonGroup label={t('loadingLabel')} className={styles.skeletonList}>
+        <Skeleton h={214} r={28} />
+        <div className={styles.skeletonPair}><Skeleton h={52} r={18} /><Skeleton h={52} r={18} /></div>
+        {[0, 1, 2, 3, 4].map(row)}
+      </SkeletonGroup>
+    );
+  }
+  return <SkeletonGroup label={t('loadingLabel')} className={styles.skeletonList}>{[0, 1, 2, 3].map(row)}</SkeletonGroup>;
 }
 
 export function ErrorNote({ children, onRetry, retryLabel }) {

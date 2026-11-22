@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import OwnerShell, { useOwner } from '@/components/owner/OwnerShell';
+import { useOwner } from '@/components/owner/OwnerShell';
 import { Card, icon } from '@/components/owner/ui/Kit';
 import { usePreferences } from '@/components/providers/Preferences';
 import { ownerFetch } from '@/lib/owner/client';
@@ -43,7 +43,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function MoreView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownNavMore')}><Body /></OwnerShell>;
+  return <Body />;
 }

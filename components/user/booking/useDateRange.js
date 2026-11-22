@@ -24,6 +24,8 @@ export function useDateRange(initial = {}) {
     if (checkOut <= value) setCheckOut(addDays(value, 1));
   };
   const changeCheckOut = (value) => value && setCheckOut(value);
+  // Both dates at once (used by the room calendar and the "free nights" suggestions).
+  const setRange = (from, to) => { if (from && to && to > from) { setCheckIn(from); setCheckOut(to); } };
 
   const ready = Boolean(checkIn && checkOut);
   return {
@@ -31,6 +33,6 @@ export function useDateRange(initial = {}) {
     nights: ready ? nightsBetween(checkIn, checkOut) : 1,
     minCheckIn: toInputDate(new Date()),
     minCheckOut: ready ? addDays(checkIn, 1) : undefined,
-    changeCheckIn, changeCheckOut,
+    changeCheckIn, changeCheckOut, setRange,
   };
 }

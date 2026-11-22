@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { handle, HttpError, readJson } from '@/lib/owner/api';
 import { createReservation, markReservationPaid } from '@/lib/owner/services';
 import { clientKey, rateLimit } from '@/lib/security/rateLimit';
+import { createZarinpalPayment } from '@/lib/payment/zarinpal';
 
 /**
  * Public. Creates a PENDING booking from the booking form. The room is held for 20 minutes while the guest pays.
@@ -26,5 +27,25 @@ export const POST = handle(async (request) => {
     const paid = await markReservationPaid(created.id, { method: 'online', authority: 'FAKE', refId: 'FAKE' });
     return NextResponse.json({ ok: true, code: paid.code, paid: true, paymentUrl: null }, { status: 201 });
   }
-  return NextResponse.json({ ok: true, code: created.code, paid: false, paymentUrl: null }, { status: 201 });
+
+  try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
+    if (!siteUrl) throw new Error('NEXT_PUBLIC_SITE_URL is not configured');
+    const payment = await createZarinpalPayment({
+      amountToman: created.pricing.total,
+      callbackUrl: `${siteUrl}/api/payments/zarinpal/callback`,
+      description: `پرداخت رزرو ${created.code} - اقامتگاه بهارنارنج`,
+      mobile: created.guest?.mobile,
+    });
+    await (await import('@/lib/db/repo')).updateReservation(created.id, {
+      payment: { method: 'online', amount: created.pricing.total, authority: payment.authority, refId: '' },
+    });
+    return NextResponse.json({ ok: true, code: created.code, paid: false, paymentUrl: payment.paymentUrl }, { status: 201 });
+  } catch (error) {
+    // Do not leave a room held when the gateway could not create a payment session.
+    const repo = await import('@/lib/db/repo');
+    await repo.deleteReservation(created.id).catch(() => {});
+    console.error('Could not create ZarinPal payment:', error?.message || error);
+    throw new HttpError(502, 'payment_gateway');
+  }
 });

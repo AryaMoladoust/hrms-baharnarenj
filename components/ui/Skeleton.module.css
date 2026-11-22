@@ -1,0 +1,24 @@
+/* currentColor keeps it visible on both the cream cards and the dark suite card. */
+.sk {
+  --sk-base: color-mix(in srgb, currentColor 9%, transparent);
+  --sk-glow: color-mix(in srgb, currentColor 17%, transparent);
+  position: relative;
+  display: block;
+  flex: none;
+  overflow: hidden;
+  background: var(--sk-base);
+}
+
+/* The light band travels in reading direction: left to right in English, right to left in Persian. Transform only, so it stays smooth. */
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(100deg, transparent 20%, var(--sk-glow) 50%, transparent 80%);
+  animation: sweep 1.4s linear infinite;
+}
+:global([dir='rtl']) .sk::after { transform: translateX(100%); animation-name: sweepRtl; }
+
+@keyframes sweep { to { transform: translateX(100%); } }
+@keyframes sweepRtl { to { transform: translateX(-100%); } }

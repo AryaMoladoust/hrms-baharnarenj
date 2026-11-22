@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import Header from '@/components/user/header/Header';
 import { usePreferences } from '@/components/providers/Preferences';
 import { getRoomBySlug } from '@/lib/rooms';
@@ -60,6 +61,18 @@ export default function MyReservations() {
 
         {state.phase === 'done' && state.items.length === 0 && <p className={styles.empty}>{t('myEmpty')}</p>}
         {state.phase === 'error' && <p className={styles.empty}>{t('myError')}</p>}
+
+        {state.phase === 'loading' && (
+          <SkeletonGroup label={t('loadingLabel')} className={styles.list}>
+            {[0, 1].map((i) => (
+              <div className={styles.card} key={i}>
+                <div className={styles.cardTop}><Skeleton w={110} h={20} r={10} /><Skeleton w={70} h={22} r="pill" /></div>
+                <Skeleton w="70%" h={15} r={8} />
+                <Skeleton w="45%" h={13} r={7} />
+              </div>
+            ))}
+          </SkeletonGroup>
+        )}
 
         <ul className={styles.list}>
           {state.items.map((item) => {

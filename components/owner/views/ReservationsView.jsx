@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import OwnerShell from '@/components/owner/OwnerShell';
 import ReservationRow from '@/components/owner/ReservationRow';
 import ReservationSheet from '@/components/owner/ReservationSheet';
 import ManualReservationSheet from '@/components/owner/ManualReservationSheet';
@@ -61,7 +60,7 @@ function Body() {
   );
 }
 
+// The frame (top bar, bottom navigation, title) comes from app/owner/layout.jsx, so it stays in place between pages.
 export default function ReservationsView() {
-  const { t } = usePreferences();
-  return <OwnerShell title={t('ownNavReservations')}><Body /></OwnerShell>;
+  return <Body />;
 }
