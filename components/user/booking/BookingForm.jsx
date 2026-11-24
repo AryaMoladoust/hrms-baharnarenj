@@ -98,7 +98,24 @@ export default function BookingForm({ slug }) {
       return;
     }
     // With a payment gateway connected the server returns paymentUrl; until then the booking page shows the booking code.
-    window.location.href = result.paymentUrl || `/booking/done?code=${encodeURIComponent(result.code)}${result.paid ? '' : '&pending=1'}`;
+
+    if (result.paymentUrl) {
+      try {
+        localStorage.setItem('bn-pending-payment', JSON.stringify({
+          code: result.code,
+          authority: result.paymentAuthority,
+          paymentUrl: result.paymentUrl,
+          createdAt: Date.now(),
+        }));
+      } catch (error) {
+        console.error('Could not save pending payment:', error);
+      }
+
+      window.location.href = result.paymentUrl;
+      return;
+    }
+
+    window.location.href = `/booking/done?code=${encodeURIComponent(result.code)}${result.paid ? '' : '&pending=1'}`;
   };
 
   const booked = Boolean(info) && info.status !== 'free'; // fully or partly taken: these exact dates cannot be booked
