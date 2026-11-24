@@ -80,7 +80,14 @@ export default function BookingForm({ slug }) {
     if (!isValidMobile(form.mobile)) next.mobile = t('errMobile');
     if (!isValidNationalId(form.nationalId)) next.nationalId = t('errNationalId');
     setErrors(next);
-    if (Object.keys(next).length) return;
+    if (Object.keys(next).length) {
+      // Take the guest to the first wrong field. Without this, on a phone the message can be off screen and "nothing happens".
+      requestAnimationFrame(() => {
+        const field = document.querySelector('form [aria-invalid="true"]');
+        if (field) { field.scrollIntoView({ block: 'center', behavior: 'smooth' }); field.focus({ preventScroll: true }); }
+      });
+      return;
+    }
     setTermsOpen(true);
   };
 
