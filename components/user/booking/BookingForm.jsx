@@ -47,6 +47,14 @@ export default function BookingForm({ slug }) {
   const [coverMissing, setCoverMissing] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // Pressing "back" in the browser from the gateway can bring this page back from the cache exactly as it was left
+  // (button stuck on "redirecting"). Make it usable again.
+  useEffect(() => {
+    const onShow = (event) => { if (event.persisted) setStatus('idle'); };
+    window.addEventListener('pageshow', onShow);
+    return () => window.removeEventListener('pageshow', onShow);
+  }, []);
+
   useEffect(() => {
     if (!range.ready) return;
     getAvailability({ checkIn: range.checkIn, checkOut: range.checkOut }).then((list) => setInfo(list.find((item) => item.slug === slug) || null));
