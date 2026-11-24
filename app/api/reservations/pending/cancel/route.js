@@ -83,8 +83,10 @@ export const POST = handle(async (request) => {
   }
 
   // Unknown/network/provider responses fail closed: keep the reservation pending.
+  // The provider's code is logged and returned so we can see what ZarinPal answers for an unpaid session.
+  console.warn(`[payment] Pending cancel not confirmed for ${reservation.code}: ZarinPal verify code ${verification.code}`);
   return NextResponse.json(
-    { ok: false, status: 'pending', error: 'payment_unconfirmed' },
+    { ok: false, status: 'pending', error: 'payment_unconfirmed', providerCode: Number.isFinite(verification.code) ? verification.code : null },
     { status: 409 },
   );
 });
