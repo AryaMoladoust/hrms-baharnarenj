@@ -64,7 +64,6 @@ function Body() {
         <div className={styles.ring} style={{ '--p': percent }} aria-hidden="true"><b>{formatNumber(data.occupied, lang)}<small>/{formatNumber(data.totalRooms, lang)}</small></b></div>
         <div className={styles.actions}>
           <Link href="/owner/reservations?new=1">{icon(<path d="M12 5v14M5 12h14" />, 18)} {t('ownNewBooking')}</Link>
-          <Link href="/owner/finance?add=1">{icon(<path d="M12 5v14M5 12h14" />, 18)} {t('ownAddExpense')}</Link>
         </div>
       </Card>
 
@@ -91,12 +90,11 @@ function Body() {
         </Card>
       )}
 
-      <Card tone="night" title={t('ownThisMonth')} iconNode={icon(<path d="M4 20V10M10 20V4M16 20v-8M22 20H2" />, 20)} action={<Link href="/owner/finance" className={styles.moreLight}>{t('ownReports')}</Link>}>
-        <dl className={styles.money}>
-          <div><dt>{t('ownIncome')}</dt><dd>{money(data.month.income, lang, t)}</dd></div>
-          <div><dt>{t('ownExpense')}</dt><dd>{money(data.month.expense, lang, t)}</dd></div>
-          <div className={styles.net}><dt>{t('ownNet')}</dt><dd data-negative={data.month.net < 0}>{money(data.month.net, lang, t)}</dd></div>
-        </dl>
+      <Card tone="night" title={t('ownMonthIncome')} iconNode={icon(<path d="M4 20V10M10 20V4M16 20v-8M22 20H2" />, 20)}>
+        <div className={styles.income}>
+          <strong>{money(data.month.income, lang, t)}</strong>
+          <span>{t('ownMonthIncomeHint')} · {day(data.month.from, lang)} – {day(data.month.to, lang)}</span>
+        </div>
         <div className={styles.bars} aria-hidden="true">
           {data.month.series.map((s) => <i key={s.key} className={s.key === data.today ? styles.barToday : undefined} style={{ height: `${Math.max(4, (Math.max(s.income, 0) / peak) * 100)}%` }} />)}
         </div>

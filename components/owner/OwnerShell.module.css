@@ -13,6 +13,7 @@
 .inner { width: min(760px, calc(100% - 28px)); margin: 0 auto; padding: 8px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .spacer { height: 66px; }
 
+.lead { min-width: 0; display: flex; align-items: center; gap: 12px; }
 .titleBlock { display: grid; min-width: 0; }
 .titleBlock span { font-size: 11px; color: var(--amber); font-weight: 800; letter-spacing: .02em; }
 .titleBlock h1 { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -21,9 +22,11 @@
 @keyframes titleIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
 /* Wraps each page's content (app/owner/template.jsx). It is replaced on every navigation, so the new page fades in while the bars stay put. */
-.pageIn { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); animation: pageIn .26s var(--ease-out, cubic-bezier(.23, 1, .32, 1)) both; }
+.pageIn { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); animation: pageIn .22s ease-out backwards; }
 .pageIn > * { min-width: 0; }
-@keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* Opacity only, on purpose. A transform on this wrapper (even one that ends at "none" with fill-mode forwards) turns it into the containing block of every
+   position: fixed child: the floating + button and the bottom sheets then followed the page content instead of the screen. */
+@keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
 
 .tools { display: flex; align-items: center; gap: 8px; }
 .iconLink, .avatar {

@@ -9,7 +9,7 @@
 }
 .ring b { font-size: 24px; line-height: 1; }
 .ring small { font-size: 13px; font-weight: 400; color: #d9d3bd; }
-.actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; }
 .actions a { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 15px; background: var(--amber); color: var(--night); font-weight: 800; font-size: 14px; }
 .actions a + a { background: rgba(247, 241, 220, .12); color: #f7f1dc; border: 1px solid rgba(247, 241, 220, .3); }
 
@@ -41,3 +41,7 @@
 .bars { height: 64px; display: flex; align-items: flex-end; gap: 2px; }
 .bars i { flex: 1; min-width: 2px; border-radius: 3px 3px 0 0; background: rgba(247, 241, 220, .28); }
 .bars .barToday { background: var(--amber); }
+
+.income { margin: 0 0 14px; display: grid; gap: 2px; }
+.income strong { font-size: 30px; line-height: 1.4; color: var(--amber); }
+.income span { font-size: 13px; color: #d9d3bd; }

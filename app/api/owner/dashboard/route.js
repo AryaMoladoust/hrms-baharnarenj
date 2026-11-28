@@ -12,15 +12,14 @@ export const GET = handle(async (request) => {
   const today = todayTehran(new Date(nowMs));
   const month = jalaliMonthBounds(today);
 
-  const [around, financeRes, expenses, unread] = await Promise.all([
+  const [around, financeRes, unread] = await Promise.all([
     repo.listReservations({ from: addDays(today, -1), to: addDays(today, 40), limit: 300 }),
     repo.listFinanceReservations({ from: month.from, to: month.to }),
-    repo.listExpenses({ from: month.from, to: month.to }),
     repo.countUnread(owner.username),
   ]);
 
   const dashboard = buildDashboard({ reservations: around, today, nowMs, unread });
-  const report = buildReport({ reservations: financeRes, expenses, from: month.from, to: month.to, group: 'day' });
+  const report = buildReport({ reservations: financeRes, expenses: [], from: month.from, to: month.to, group: 'day' }) // expenses are not part of this version: only the income from reservations is shown;
   const recent = [...(await repo.listReservations({ limit: 60 }))]
     .filter((r) => r.kind === 'booking' && r.status !== 'cancelled')
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))

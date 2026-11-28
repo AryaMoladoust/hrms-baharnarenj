@@ -4,10 +4,12 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import OwnerBottomNav from '@/components/owner/OwnerBottomNav';
+import OwnerMenu from '@/components/owner/OwnerMenu';
 import { icon } from '@/components/owner/ui/Kit';
 import { notificationText } from '@/components/owner/notificationText';
 import { usePreferences } from '@/components/providers/Preferences';
 import { ownerFetch } from '@/lib/owner/client';
+import menuStyles from '@/components/user/header/Header.module.css'; // the hamburger button looks like the guest site's
 import styles from './OwnerShell.module.css';
 
 const OwnerContext = createContext({ owner: null, unread: 0, refresh: () => {}, toast: () => {} });
@@ -51,6 +53,8 @@ function Frame({ pathname, children }) {
   const [owner, setOwner] = useState(null);
   const [unread, setUnread] = useState(0);
   const [message, setMessage] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef(null);
   const known = useRef(null);
   const timer = useRef(null);
 
@@ -86,6 +90,9 @@ function Frame({ pathname, children }) {
     return () => { clearInterval(id); document.removeEventListener('visibilitychange', onVisible); clearTimeout(timer.current); };
   }, [refresh]);
 
+  const closeMenu = useCallback(() => { setMenuOpen(false); menuButton.current?.focus(); }, []);
+  useEffect(() => { setMenuOpen(false); }, [pathname]); // a page change always closes the menu
+
   const value = useMemo(() => ({ owner, unread, setUnread, refresh, toast }), [owner, unread, refresh, toast]);
   const initial = (owner?.displayName || owner?.username || '·').slice(0, 1).toUpperCase();
 
@@ -94,9 +101,14 @@ function Frame({ pathname, children }) {
       <div className={styles.shell}>
         <header className={styles.header}>
           <div className={styles.inner}>
-            <div className={styles.titleBlock}>
-              <span>{t('ownPanel')}</span>
-              <h1 key={title} className={styles.titleIn}>{title}</h1>
+            <div className={styles.lead}>
+              <button ref={menuButton} className={menuStyles.iconButton} type="button" aria-label={t('menu')} aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+                <span className={menuStyles.menuIcon} aria-hidden="true"><i /><i /><i /></span>
+              </button>
+              <div className={styles.titleBlock}>
+                <span>{t('ownPanel')}</span>
+                <h1 key={title} className={styles.titleIn}>{title}</h1>
+              </div>
             </div>
             <div className={styles.tools}>
               <Link href="/owner/notifications" className={styles.iconLink} aria-label={t('ownNotifications')}>
@@ -123,6 +135,7 @@ function Frame({ pathname, children }) {
           <Link href="/owner/reservations" className={styles.toast} data-tone={message.tone} role="status">{message.text}</Link>
         )}
         <OwnerBottomNav />
+        <OwnerMenu open={menuOpen} onClose={closeMenu} unread={unread} />
       </div>
     </OwnerContext.Provider>
   );
